@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — VeriLaw</title>
+  <meta name="description" content="Log in to your VeriLaw account to verify documents and manage complaints.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+<!-- ═══════════════════════════════════════════════════ AUTH HEADER ══ -->
+<div class="auth-page__header">
+  <a href="index.html" aria-label="VeriLaw home">
+    <img src="assets/logo.svg" alt="VeriLaw" width="140" height="36">
+  </a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ AUTH BODY ══ -->
+<main class="auth-page__body" id="main-content">
+  <div class="form-card" style="max-width:440px;width:100%;" role="main" aria-labelledby="login-heading">
+    <!-- Header -->
+    <div class="form-card__header">
+      <h1 class="form-card__title" id="login-heading">Welcome back</h1>
+      <p class="form-card__subtitle">Sign in to your VeriLaw account</p>
+    </div>
+
+    <!-- Google OAuth -->
+    <button class="btn btn--social btn--full" id="btn-google" type="button" aria-label="Continue with Google">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <!-- Divider -->
+    <div class="form-divider" aria-hidden="true">
+      <span>or sign in with email</span>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" novalidate aria-label="Login form">
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" for="login-email">
+          Email address
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </span>
+          <input
+            type="email"
+            id="login-email"
+            name="email"
+            class="form-input form-input--with-icon"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            aria-required="true"
+            aria-describedby="login-email-error"
+          >
+        </div>
+        <p class="form-error" id="login-email-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <div class="form-label-row">
+          <label class="form-label" for="login-password">
+            Password
+            <span class="form-label__required" aria-hidden="true">*</span>
+          </label>
+          <a href="#" class="form-label-link" id="forgot-password-link">Forgot password?</a>
+        </div>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            class="form-input form-input--with-icon form-input--with-action"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+            aria-required="true"
+            aria-describedby="login-password-error"
+          >
+          <button type="button" class="form-input-action" id="toggle-password" aria-label="Show password">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <p class="form-error" id="login-password-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="form-group" style="margin-bottom:var(--space-lg)">
+        <label class="form-checkbox">
+          <input type="checkbox" id="remember-me" name="remember" class="form-checkbox__input">
+          <span class="form-checkbox__box" aria-hidden="true"></span>
+          <span class="form-checkbox__label">Keep me signed in</span>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn--primary btn--full btn--lg" id="login-submit" aria-live="polite">
+        <span class="btn__spinner" aria-hidden="true"></span>
+        <span class="btn__text">Login</span>
+      </button>
+    </form>
+
+    <!-- Footer link -->
+    <p class="form-card__footer-text">
+      Don't have an account?
+      <a href="register.html" class="form-card__footer-link">Create one free</a>
+    </p>
+
+    <!-- Theme toggle -->
+    <div class="flex justify-center" style="margin-top:var(--space-lg)">
+      <button class="btn btn--text btn--sm" data-theme-toggle aria-label="Toggle dark mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        Toggle theme
+      </button>
+    </div>
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════ LEGAL FOOTER ══ -->
+<footer style="text-align:center;padding:var(--space-lg);font-size:var(--font-size-xs);color:var(--color-text-disabled)">
+  <p>&copy; 2026 VeriLaw. <a href="index.html" style="color:var(--color-text-secondary)">Back to home</a> &nbsp;·&nbsp; <a href="#" style="color:var(--color-text-secondary)">Privacy Policy</a></p>
+  <p style="margin-top:4px;">VeriLaw provides legal information only. Not a substitute for qualified legal counsel.</p>
+</footer>
+
+<!-- ════════════════════════════════════════════════════ SCRIPTS ══ -->
+<script src="js/utils.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

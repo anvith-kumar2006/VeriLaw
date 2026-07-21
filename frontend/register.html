@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — VeriLaw</title>
+  <meta name="description" content="Create your free VeriLaw account to start verifying documents and preparing complaints.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+
+<!-- ═══════════════════════════════════════════════════ AUTH HEADER ══ -->
+<div class="auth-page__header">
+  <a href="index.html" aria-label="VeriLaw home">
+    <img src="assets/logo.svg" alt="VeriLaw" width="140" height="36">
+  </a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ AUTH BODY ══ -->
+<main class="auth-page__body" id="main-content">
+  <div class="form-card" style="max-width:480px;width:100%;" role="main" aria-labelledby="register-heading">
+
+    <!-- Step indicator -->
+    <div class="step-indicator" aria-label="Registration progress" style="margin-bottom:var(--space-lg)">
+      <div class="step-indicator__step step-indicator__step--active" aria-current="step" aria-label="Step 1: Account details">
+        <div class="step-indicator__circle">1</div>
+        <div class="step-indicator__label">Details</div>
+      </div>
+      <div class="step-indicator__line" aria-hidden="true"></div>
+      <div class="step-indicator__step" aria-label="Step 2: Verification">
+        <div class="step-indicator__circle">2</div>
+        <div class="step-indicator__label">Verify</div>
+      </div>
+      <div class="step-indicator__line" aria-hidden="true"></div>
+      <div class="step-indicator__step" aria-label="Step 3: Done">
+        <div class="step-indicator__circle">3</div>
+        <div class="step-indicator__label">Done</div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="form-card__header">
+      <h1 class="form-card__title" id="register-heading">Create your account</h1>
+      <p class="form-card__subtitle">Start verifying documents for free — no credit card required</p>
+    </div>
+
+    <!-- Google OAuth -->
+    <button class="btn btn--social btn--full" id="btn-google" type="button" aria-label="Sign up with Google">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Sign up with Google
+    </button>
+
+    <!-- Divider -->
+    <div class="form-divider" aria-hidden="true">
+      <span>or create an account with email</span>
+    </div>
+
+    <!-- Register Form -->
+    <form id="register-form" novalidate aria-label="Registration form">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label class="form-label" for="reg-name">
+          Full name
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+          </span>
+          <input
+            type="text"
+            id="reg-name"
+            name="full_name"
+            class="form-input form-input--with-icon"
+            placeholder="Rahul Sharma"
+            autocomplete="name"
+            required
+            aria-required="true"
+            aria-describedby="reg-name-error"
+            maxlength="100"
+          >
+        </div>
+        <p class="form-error" id="reg-name-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label" for="reg-email">
+          Email address
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </span>
+          <input
+            type="email"
+            id="reg-email"
+            name="email"
+            class="form-input form-input--with-icon"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+            aria-required="true"
+            aria-describedby="reg-email-error"
+          >
+        </div>
+        <p class="form-error" id="reg-email-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label class="form-label" for="reg-phone">
+          Mobile number
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true" style="font-size:var(--font-size-xs);font-weight:600;color:var(--color-text-secondary)">+91</span>
+          <input
+            type="tel"
+            id="reg-phone"
+            name="mobile"
+            class="form-input form-input--with-icon"
+            placeholder="9876543210"
+            autocomplete="tel"
+            required
+            aria-required="true"
+            aria-describedby="reg-phone-error"
+            maxlength="10"
+            pattern="[0-9]{10}"
+          >
+        </div>
+        <p class="form-error" id="reg-phone-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label" for="reg-password">
+          Password
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input
+            type="password"
+            id="reg-password"
+            name="password"
+            class="form-input form-input--with-icon form-input--with-action"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+            required
+            aria-required="true"
+            aria-describedby="reg-password-error"
+            minlength="8"
+          >
+          <button type="button" class="form-input-action" id="toggle-reg-password" aria-label="Show password">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <!-- Password strength meter -->
+        <div class="password-strength" id="password-strength" aria-live="polite" aria-label="Password strength indicator">
+          <div class="password-strength__bars" aria-hidden="true">
+            <div class="password-strength__bar"></div>
+            <div class="password-strength__bar"></div>
+            <div class="password-strength__bar"></div>
+            <div class="password-strength__bar"></div>
+          </div>
+          <span class="password-strength__label"></span>
+        </div>
+        <p class="form-hint">Minimum 8 characters. Use uppercase, numbers, and symbols for a stronger password.</p>
+        <p class="form-error" id="reg-password-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label class="form-label" for="reg-confirm-password">
+          Confirm password
+          <span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <div class="form-input-wrapper">
+          <span class="form-input-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input
+            type="password"
+            id="reg-confirm-password"
+            name="confirm_password"
+            class="form-input form-input--with-icon"
+            placeholder="Repeat your password"
+            autocomplete="new-password"
+            required
+            aria-required="true"
+            aria-describedby="reg-confirm-error"
+          >
+        </div>
+        <p class="form-error" id="reg-confirm-error" role="alert" aria-live="assertive"></p>
+      </div>
+
+      <!-- Terms -->
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="reg-terms" name="terms" class="form-checkbox__input" required aria-required="true">
+          <span class="form-checkbox__box" aria-hidden="true"></span>
+          <span class="form-checkbox__label">
+            I agree to VeriLaw's
+            <a href="#" class="form-label-link">Terms of Service</a>
+            and
+            <a href="#" class="form-label-link">Privacy Policy</a>
+          </span>
+        </label>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn--primary btn--full btn--lg" id="register-submit" aria-live="polite">
+        <span class="btn__spinner" aria-hidden="true"></span>
+        <span class="btn__text">Create Account</span>
+      </button>
+    </form>
+
+    <!-- Footer link -->
+    <p class="form-card__footer-text">
+      Already have an account?
+      <a href="login.html" class="form-card__footer-link">Sign in</a>
+    </p>
+
+    <!-- Theme toggle -->
+    <div class="flex justify-center" style="margin-top:var(--space-lg)">
+      <button class="btn btn--text btn--sm" data-theme-toggle aria-label="Toggle dark mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        Toggle theme
+      </button>
+    </div>
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════ LEGAL FOOTER ══ -->
+<footer style="text-align:center;padding:var(--space-lg);font-size:var(--font-size-xs);color:var(--color-text-disabled)">
+  <p>&copy; 2026 VeriLaw. <a href="index.html" style="color:var(--color-text-secondary)">Back to home</a> &nbsp;·&nbsp; <a href="#" style="color:var(--color-text-secondary)">Privacy Policy</a></p>
+  <p style="margin-top:4px;">VeriLaw provides legal information only. Not a substitute for qualified legal counsel.</p>
+</footer>
+
+<!-- ════════════════════════════════════════════════════ SCRIPTS ══ -->
+<script src="js/utils.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+/* ==========================================================================
+   VeriLaw — Layout System
+   12-column grid, containers, flex/grid utilities, sidebar & dashboard shell
+   ========================================================================== */
+
+/* ── Global Reset & Base ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family:      var(--font-family);
+  font-size:        var(--font-size-body);
+  font-weight:      var(--font-weight-regular);
+  line-height:      var(--line-height-body);
+  color:            var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover { color: var(--color-primary-dark); }
+
+ul, ol { list-style: none; }
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-body); font-weight: var(--font-weight-semibold); }
+
+p { margin-bottom: var(--space-md); }
+p:last-child { margin-bottom: 0; }
+
+/* ── Container ─────────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+.container--sm  { max-width: 640px; }
+.container--md  { max-width: 960px; }
+.container--lg  { max-width: 1280px; }
+
+/* ── 12-Column Grid ────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-lg);
+}
+
+.col-1  { grid-column: span 1;  }
+.col-2  { grid-column: span 2;  }
+.col-3  { grid-column: span 3;  }
+.col-4  { grid-column: span 4;  }
+.col-5  { grid-column: span 5;  }
+.col-6  { grid-column: span 6;  }
+.col-7  { grid-column: span 7;  }
+.col-8  { grid-column: span 8;  }
+.col-9  { grid-column: span 9;  }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+/* ── Flex Utilities ────────────────────────────────────────────────────── */
+.flex          { display: flex; }
+.flex-col      { display: flex; flex-direction: column; }
+.flex-wrap     { flex-wrap: wrap; }
+.items-start   { align-items: flex-start; }
+.items-center  { align-items: center; }
+.items-end     { align-items: flex-end; }
+.justify-start { justify-content: flex-start; }
+.justify-center{ justify-content: center; }
+.justify-end   { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around  { justify-content: space-around; }
+.flex-1        { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.gap-xs  { gap: var(--space-xs);  }
+.gap-sm  { gap: var(--space-sm);  }
+.gap-md  { gap: var(--space-md);  }
+.gap-lg  { gap: var(--space-lg);  }
+.gap-xl  { gap: var(--space-xl);  }
+
+/* ── Spacing Utilities ─────────────────────────────────────────────────── */
+.mt-xs  { margin-top:    var(--space-xs);  }
+.mt-sm  { margin-top:    var(--space-sm);  }
+.mt-md  { margin-top:    var(--space-md);  }
+.mt-lg  { margin-top:    var(--space-lg);  }
+.mt-xl  { margin-top:    var(--space-xl);  }
+.mt-xxl { margin-top:    var(--space-xxl); }
+.mb-xs  { margin-bottom: var(--space-xs);  }
+.mb-sm  { margin-bottom: var(--space-sm);  }
+.mb-md  { margin-bottom: var(--space-md);  }
+.mb-lg  { margin-bottom: var(--space-lg);  }
+.mb-xl  { margin-bottom: var(--space-xl);  }
+.mb-xxl { margin-bottom: var(--space-xxl); }
+.p-sm   { padding: var(--space-sm);  }
+.p-md   { padding: var(--space-md);  }
+.p-lg   { padding: var(--space-lg);  }
+.p-xl   { padding: var(--space-xl);  }
+
+/* ── Text Utilities ────────────────────────────────────────────────────── */
+.text-center  { text-align: center; }
+.text-left    { text-align: left; }
+.text-right   { text-align: right; }
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-success { color: var(--color-success); }
+.text-danger  { color: var(--color-danger); }
+.text-warning { color: var(--color-warning); }
+.text-sm      { font-size: var(--font-size-sm); }
+.text-xs      { font-size: var(--font-size-xs); }
+.text-lg      { font-size: var(--font-size-body-lg); }
+.font-medium  { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold    { font-weight: var(--font-weight-bold); }
+
+/* ── Display Utilities ─────────────────────────────────────────────────── */
+.hidden      { display: none !important; }
+.block       { display: block; }
+.inline-block { display: inline-block; }
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Section Layout ────────────────────────────────────────────────────── */
+.section {
+  padding-block: var(--space-xxl);
+}
+
+.section--lg {
+  padding-block: var(--space-xxxl);
+}
+
+.section__header {
+  text-align: center;
+  margin-bottom: var(--space-xxl);
+}
+
+.section__eyebrow {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+}
+
+.section__title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+}
+
+.section__subtitle {
+  font-size: var(--font-size-body-lg);
+  color: var(--color-text-secondary);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* ── Dashboard App Shell ───────────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--z-sticky);
+  transition: width var(--transition), transform var(--transition);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: margin-left var(--transition);
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-lg);
+  gap: var(--space-md);
+  z-index: var(--z-raised);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Dashboard Page Content */
+.page-content {
+  flex: 1;
+  padding: var(--space-lg);
+}
+
+/* ── Divider ───────────────────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin-block: var(--space-md);
+}
+
+/* ── Overlay ───────────────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}

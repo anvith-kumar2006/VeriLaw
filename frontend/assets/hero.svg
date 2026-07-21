@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 440" fill="none" aria-label="VeriLaw hero illustration — AI document verification">
+  <!-- Background blob -->
+  <ellipse cx="260" cy="220" rx="230" ry="200" fill="#EFF6FF" opacity="0.6"/>
+
+  <!-- Main document card -->
+  <rect x="120" y="60" width="200" height="260" rx="16" fill="white" stroke="#E2E8F0" stroke-width="1.5"
+    style="filter:drop-shadow(0 10px 30px rgba(0,0,0,0.08))"/>
+  <!-- Document header bar -->
+  <rect x="120" y="60" width="200" height="40" rx="16" fill="#2563EB"/>
+  <rect x="120" y="84" width="200" height="16" fill="#2563EB"/>
+  <!-- Header icon -->
+  <circle cx="148" cy="80" r="10" fill="rgba(255,255,255,0.2)"/>
+  <path d="M144 80h8M148 76v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Header text lines -->
+  <rect x="164" y="74" width="80" height="6" rx="3" fill="rgba(255,255,255,0.7)"/>
+  <rect x="164" y="84" width="56" height="4" rx="2" fill="rgba(255,255,255,0.4)"/>
+
+  <!-- Document body lines -->
+  <rect x="140" y="120" width="160" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="134" width="130" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="148" width="145" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="162" width="110" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="184" width="160" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="198" width="90"  height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="140" y="212" width="140" height="6" rx="3" fill="#E2E8F0"/>
+
+  <!-- Stamp / Verified badge on document -->
+  <circle cx="260" cy="270" r="30" fill="#F0FDF4" stroke="#22C55E" stroke-width="2" stroke-dasharray="4 2"/>
+  <path d="M248 270l8 8 16-16" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Second document (behind, rotated) -->
+  <rect x="240" y="100" width="180" height="240" rx="14" fill="white" stroke="#E2E8F0" stroke-width="1"
+    transform="rotate(8 330 220)"
+    style="filter:drop-shadow(0 4px 12px rgba(0,0,0,0.05))" opacity="0.8"/>
+  <rect x="240" y="100" width="180" height="36" rx="14" fill="#06B6D4" transform="rotate(8 330 220)" opacity="0.8"/>
+  <rect x="240" y="122" width="180" height="14" fill="#06B6D4" transform="rotate(8 330 220)" opacity="0.8"/>
+
+  <!-- AI Brain / Scan indicator -->
+  <rect x="340" y="150" width="130" height="90" rx="12" fill="white" stroke="#E2E8F0" stroke-width="1.5"
+    style="filter:drop-shadow(0 8px 24px rgba(37,99,235,0.12))"/>
+  <circle cx="370" cy="185" r="18" fill="#EFF6FF"/>
+  <!-- Brain outline simplified -->
+  <path d="M362 185 Q362 175 370 174 Q378 174 378 182 Q382 182 382 188 Q382 194 376 194 Q376 196 370 196 Q364 196 364 194 Q358 194 358 188 Q358 182 362 185Z"
+        stroke="#2563EB" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <line x1="370" y1="174" x2="370" y2="196" stroke="#2563EB" stroke-width="1" opacity="0.4"/>
+  <!-- AI label -->
+  <rect x="395" y="178" width="60" height="6" rx="3" fill="#E2E8F0"/>
+  <rect x="395" y="190" width="44" height="5" rx="2.5" fill="#EFF6FF"/>
+  <!-- Confidence bar -->
+  <rect x="356" y="208" width="98" height="5" rx="2.5" fill="#E2E8F0"/>
+  <rect x="356" y="208" width="82" height="5" rx="2.5" fill="#2563EB"/>
+  <text x="356" y="225" font-family="Inter,Arial,sans-serif" font-size="9" fill="#64748B">Confidence: 96%</text>
+
+  <!-- Fraud alert card -->
+  <rect x="52" y="220" width="120" height="72" rx="12" fill="white" stroke="#E2E8F0" stroke-width="1.5"
+    style="filter:drop-shadow(0 6px 18px rgba(0,0,0,0.07))"/>
+  <rect x="60" y="232" width="22" height="22" rx="6" fill="#FEF2F2"/>
+  <!-- Alert icon -->
+  <path d="M71 237l-7 12h14l-7-12z" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="71" y1="241" x2="71" y2="244" stroke="#EF4444" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="71" cy="246.5" r="0.7" fill="#EF4444"/>
+  <rect x="88" y="234" width="68" height="5" rx="2.5" fill="#FEE2E2"/>
+  <rect x="88" y="244" width="50" height="4" rx="2" fill="#E2E8F0"/>
+  <rect x="60" y="264" width="96" height="18" rx="8" fill="#EFF6FF"/>
+  <text x="108" y="277" font-family="Inter,Arial,sans-serif" font-size="9" fill="#2563EB" text-anchor="middle">Fraud Check</text>
+
+  <!-- Upload indicator (bottom right) -->
+  <rect x="360" y="270" width="110" height="64" rx="12" fill="white" stroke="#E2E8F0" stroke-width="1.5"
+    style="filter:drop-shadow(0 6px 18px rgba(0,0,0,0.07))"/>
+  <!-- Upload arrow -->
+  <circle cx="385" cy="295" r="14" fill="#EFF6FF"/>
+  <path d="M385 302v-12M381 294l4-4 4 4" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="406" y="289" width="52" height="5" rx="2.5" fill="#E2E8F0"/>
+  <rect x="406" y="299" width="36" height="4" rx="2" fill="#EFF6FF"/>
+  <!-- Progress bar -->
+  <rect x="368" y="318" width="90" height="5" rx="2.5" fill="#E2E8F0"/>
+  <rect x="368" y="318" width="68" height="5" rx="2.5" fill="#22C55E"/>
+
+  <!-- Floating dots decoration -->
+  <circle cx="100" cy="140" r="5" fill="#2563EB" opacity="0.15"/>
+  <circle cx="90"  cy="160" r="3" fill="#06B6D4" opacity="0.2"/>
+  <circle cx="430" cy="120" r="6" fill="#2563EB" opacity="0.12"/>
+  <circle cx="450" cy="145" r="4" fill="#22C55E" opacity="0.2"/>
+  <circle cx="108" cy="360" r="7" fill="#EF4444" opacity="0.1"/>
+  <circle cx="420" cy="360" r="5" fill="#06B6D4" opacity="0.15"/>
+</svg>

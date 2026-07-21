@@ -1,0 +1,271 @@
+/* ==========================================================================
+   VeriLaw — Button Components
+   All button variants, sizes, states, and interactions
+   ========================================================================== */
+
+/* ── Base Button ───────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg);
+  height: 44px; /* medium default */
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color var(--transition),
+    border-color     var(--transition),
+    color            var(--transition),
+    transform        var(--transition),
+    box-shadow       var(--transition),
+    opacity          var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Button Sizes ──────────────────────────────────────────────────────── */
+.btn--sm {
+  height: 36px;
+  padding: 0 var(--space-md);
+  font-size: var(--font-size-sm);
+  border-radius: calc(var(--radius-sm) - 2px);
+}
+
+.btn--md {
+  height: 44px;
+  padding: 0 var(--space-lg);
+}
+
+.btn--lg {
+  height: 52px;
+  padding: 0 var(--space-xl);
+  font-size: var(--font-size-body-lg);
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* ── Primary Button ────────────────────────────────────────────────────── */
+.btn--primary {
+  background-color: var(--color-primary);
+  border-color:     var(--color-primary);
+  color:            var(--color-text-inverse);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color:     var(--color-primary-dark);
+  transform:        translateY(-2px);
+  box-shadow:       var(--shadow-btn);
+}
+
+.btn--primary:active {
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* ── Secondary Button ──────────────────────────────────────────────────── */
+.btn--secondary {
+  background-color: transparent;
+  border-color:     var(--color-border-strong);
+  color:            var(--color-text);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-background);
+  border-color:     var(--color-primary);
+  color:            var(--color-primary);
+  transform:        translateY(-2px);
+}
+
+/* ── Outline (Ghost) Button ────────────────────────────────────────────── */
+.btn--outline {
+  background-color: transparent;
+  border-color:     var(--color-primary);
+  color:            var(--color-primary);
+}
+
+.btn--outline:hover {
+  background-color: var(--color-primary-light);
+  transform:        translateY(-2px);
+  box-shadow:       var(--shadow-hover);
+}
+
+/* ── Success Button ────────────────────────────────────────────────────── */
+.btn--success {
+  background-color: var(--color-success);
+  border-color:     var(--color-success);
+  color:            var(--color-text-inverse);
+}
+
+.btn--success:hover {
+  background-color: #16A34A;
+  border-color:     #16A34A;
+  transform:        translateY(-2px);
+  box-shadow:       0 12px 25px rgba(34, 197, 94, 0.3);
+}
+
+/* ── Danger Button ─────────────────────────────────────────────────────── */
+.btn--danger {
+  background-color: var(--color-danger);
+  border-color:     var(--color-danger);
+  color:            var(--color-text-inverse);
+}
+
+.btn--danger:hover {
+  background-color: #DC2626;
+  border-color:     #DC2626;
+  transform:        translateY(-2px);
+  box-shadow:       0 12px 25px rgba(239, 68, 68, 0.3);
+}
+
+/* ── Danger Outline ────────────────────────────────────────────────────── */
+.btn--danger-outline {
+  background-color: transparent;
+  border-color:     var(--color-danger);
+  color:            var(--color-danger);
+}
+
+.btn--danger-outline:hover {
+  background-color: var(--color-danger-light);
+  transform:        translateY(-2px);
+}
+
+/* ── Text Button (link style) ──────────────────────────────────────────── */
+.btn--text {
+  background-color: transparent;
+  border-color:     transparent;
+  color:            var(--color-primary);
+  padding: 0;
+  height: auto;
+}
+
+.btn--text:hover {
+  color:            var(--color-primary-dark);
+  text-decoration:  underline;
+  transform:        none;
+}
+
+/* ── Icon Button ───────────────────────────────────────────────────────── */
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.btn--icon:hover {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transform: none;
+}
+
+.btn--icon-sm {
+  width: 32px;
+  height: 32px;
+}
+
+/* ── Disabled State ────────────────────────────────────────────────────── */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Loading State ─────────────────────────────────────────────────────── */
+.btn--loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.btn--loading .btn__text {
+  opacity: 0;
+}
+
+.btn--loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Button Group ──────────────────────────────────────────────────────── */
+.btn-group {
+  display: inline-flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.btn-group--full {
+  width: 100%;
+}
+
+.btn-group--full .btn {
+  flex: 1;
+}
+
+/* ── Social Button ─────────────────────────────────────────────────────── */
+.btn--social {
+  background-color: var(--color-surface);
+  border-color:     var(--color-border);
+  color:            var(--color-text);
+  font-weight:      var(--font-weight-medium);
+}
+
+.btn--social:hover {
+  background-color: var(--color-background);
+  border-color:     var(--color-border-strong);
+  transform:        translateY(-1px);
+  box-shadow:       var(--shadow-sm);
+}
+
+/* ── Ripple effect (optional enhancement) ──────────────────────────────── */
+.btn__ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none" aria-label="VeriLaw logo">
+  <!-- Scale / Balance icon -->
+  <g transform="translate(4, 4)">
+    <!-- Center column -->
+    <rect x="19" y="4" width="2" height="32" fill="#2563EB" rx="1"/>
+    <!-- Top bar -->
+    <rect x="8" y="4" width="24" height="2.5" fill="#2563EB" rx="1.25"/>
+    <!-- Left arm -->
+    <line x1="9" y1="5.25" x2="5" y2="14" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Right arm -->
+    <line x1="31" y1="5.25" x2="35" y2="14" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Left pan -->
+    <path d="M2 14 Q5 20 8 14Z" fill="#2563EB" opacity="0.85"/>
+    <!-- Right pan -->
+    <path d="M32 14 Q35 20 38 14Z" fill="#2563EB" opacity="0.85"/>
+    <!-- Base -->
+    <rect x="13" y="36" width="14" height="3" fill="#2563EB" rx="1.5"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="52" y="33" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="22" fill="#0F172A" letter-spacing="-0.5">Veri</text>
+  <text x="100" y="33" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="22" fill="#2563EB" letter-spacing="-0.5">Law</text>
+</svg>

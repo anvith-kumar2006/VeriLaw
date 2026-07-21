@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriLaw — AI-Powered Legal Document Verification</title>
+  <meta name="description" content="VeriLaw helps citizens verify legal documents, detect fraud, and prepare complaint packages using AI. Simple, accessible, and trusted.">
+  <meta name="keywords" content="legal document verification, AI, complaint, India, VeriLaw">
+  <meta name="author" content="VeriLaw">
+  <!-- Open Graph -->
+  <meta property="og:title" content="VeriLaw — AI-Powered Legal Document Verification">
+  <meta property="og:description" content="Verify documents, detect fraud, and prepare legal complaints with AI assistance.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/hero.svg">
+  <!-- Favicon placeholder -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ NAVBAR ══ -->
+<header>
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar__inner">
+      <!-- Brand -->
+      <a href="index.html" class="navbar__brand" aria-label="VeriLaw home">
+        <img src="assets/logo.svg" alt="VeriLaw" class="navbar__logo-icon" width="140" height="36">
+      </a>
+
+      <!-- Desktop links -->
+      <div class="navbar__nav" role="menubar">
+        <a href="#features"    class="navbar__link" role="menuitem">Features</a>
+        <a href="#how-it-works" class="navbar__link" role="menuitem">How It Works</a>
+        <a href="#stats"       class="navbar__link" role="menuitem">About</a>
+        <a href="#faq"         class="navbar__link" role="menuitem">FAQ</a>
+      </div>
+
+      <!-- Desktop actions -->
+      <div class="navbar__actions">
+        <button class="btn btn--icon" data-theme-toggle aria-label="Switch to dark mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <a href="login.html"    class="btn btn--secondary btn--sm">Login</a>
+        <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button class="navbar__hamburger" id="navbar-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile nav drawer -->
+  <div class="mobile-nav" id="mobile-nav" role="menu" aria-label="Mobile navigation">
+    <a href="#features"     class="mobile-nav__link" role="menuitem">Features</a>
+    <a href="#how-it-works" class="mobile-nav__link" role="menuitem">How It Works</a>
+    <a href="#stats"        class="mobile-nav__link" role="menuitem">About</a>
+    <a href="#faq"          class="mobile-nav__link" role="menuitem">FAQ</a>
+    <div class="mobile-nav__divider"></div>
+    <a href="login.html"    class="mobile-nav__link" role="menuitem">Login</a>
+    <a href="register.html" class="mobile-nav__link" role="menuitem" style="color:var(--color-primary);font-weight:600;">Get Started →</a>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <!-- ═══════════════════════════════════════════════════════════ HERO ══ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero__layout">
+        <!-- Content -->
+        <div class="hero__content">
+          <div class="hero__badge" data-animate="fade-in">
+            <span class="hero__badge-dot" aria-hidden="true"></span>
+            AI-Powered Document Verification
+          </div>
+
+          <h1 class="hero__title" id="hero-title" data-animate="fade-in-up">
+            <em>Verify</em> Legal Documents.<br>
+            Detect Fraud Instantly.
+          </h1>
+
+          <p class="hero__subtitle" data-animate="fade-in-up" style="animation-delay:0.1s">
+            VeriLaw uses artificial intelligence to help citizens verify legal documents, detect fraudulent content, and prepare structured complaint packages — before approaching any government authority.
+          </p>
+
+          <div class="hero__actions" data-animate="fade-in-up" style="animation-delay:0.2s">
+            <a href="register.html" class="btn btn--primary btn--lg">
+              Get Started Free
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a href="#how-it-works" class="btn btn--outline btn--lg" data-scroll-to="#how-it-works">
+              See How It Works
+            </a>
+          </div>
+
+          <div class="hero__trust" data-animate="fade-in" style="animation-delay:0.3s">
+            <svg class="hero__trust-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            No credit card required &nbsp;·&nbsp;
+            <svg class="hero__trust-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Secure &amp; Private &nbsp;·&nbsp;
+            <svg class="hero__trust-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            WCAG 2.1 Accessible
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="hero__visual" aria-hidden="true">
+          <img src="assets/hero.svg" alt="VeriLaw AI document verification illustration" width="480" height="400" loading="eager">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ FEATURES ══ -->
+  <section class="section features-section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow">What We Offer</span>
+        <h2 class="section__title" id="features-title">Intelligent Legal Assistance</h2>
+        <p class="section__subtitle">Three powerful AI tools that guide you through the entire legal complaint process — from document verification to submission readiness.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <article class="feature-card" data-animate="fade-in-up" aria-labelledby="feature-1-title">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-card__title" id="feature-1-title">AI Document Verification</h3>
+          <p class="feature-card__description">Upload any legal document — contracts, invoices, identity proofs — and our AI instantly checks for authenticity, detects manipulation, and flags suspicious content with a confidence score.</p>
+        </article>
+
+        <!-- Feature 2 -->
+        <article class="feature-card" data-animate="fade-in-up" style="animation-delay:0.1s" aria-labelledby="feature-2-title">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="feature-card__title" id="feature-2-title">Smart Complaint Generator</h3>
+          <p class="feature-card__description">Generate professionally formatted complaint documents for consumer disputes, labour issues, RTI applications, cyber crimes, and more — tailored to the correct government authority.</p>
+        </article>
+
+        <!-- Feature 3 -->
+        <article class="feature-card" data-animate="fade-in-up" style="animation-delay:0.2s" aria-labelledby="feature-3-title">
+          <div class="feature-card__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h3 class="feature-card__title" id="feature-3-title">Evidence Organiser</h3>
+          <p class="feature-card__description">Upload bills, screenshots, emails, and photos. Our OCR engine extracts text and dates automatically, then organises your evidence into a clear, chronological timeline ready for submission.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════ HOW IT WORKS ══ -->
+  <section class="section how-section" id="how-it-works" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow">Simple Process</span>
+        <h2 class="section__title" id="how-title">Three Steps to a Verified Complaint</h2>
+        <p class="section__subtitle">From document upload to a print-ready complaint package in minutes — no legal knowledge required.</p>
+      </div>
+
+      <div class="how-grid">
+        <div class="how-step" data-animate="fade-in-up">
+          <div class="how-step__number" aria-label="Step 1" role="img">1</div>
+          <h3 class="how-step__title">Describe Your Issue</h3>
+          <p class="how-step__description">Tell us what happened in plain language. Our AI classifies your complaint type and recommends the correct government authority — Consumer Commission, Cyber Crime Portal, Labour Department, and more.</p>
+        </div>
+
+        <div class="how-step" data-animate="fade-in-up" style="animation-delay:0.1s">
+          <div class="how-step__number" aria-label="Step 2" role="img">2</div>
+          <h3 class="how-step__title">Upload Evidence</h3>
+          <p class="how-step__description">Drag and drop your supporting documents — invoices, screenshots, audio recordings, PDFs. OCR automatically extracts key details like dates, amounts, and names to build your evidence timeline.</p>
+        </div>
+
+        <div class="how-step" data-animate="fade-in-up" style="animation-delay:0.2s">
+          <div class="how-step__number" aria-label="Step 3" role="img">3</div>
+          <h3 class="how-step__title">Generate &amp; Submit</h3>
+          <p class="how-step__description">Download a professionally formatted complaint document in PDF or printable format, complete with your evidence summary, the authority's details, and all required legal sections filled in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ STATISTICS ══ -->
+  <section class="section stats-section" id="stats" aria-labelledby="stats-title">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow">Trusted by Citizens</span>
+        <h2 class="section__title" id="stats-title">Making Legal Help Accessible</h2>
+        <p class="section__subtitle">VeriLaw simplifies the complaint process for everyone — from students to senior citizens — across India.</p>
+      </div>
+
+      <div class="stats-row" role="list">
+        <div class="stat-counter" role="listitem">
+          <div class="stat-counter__value">
+            <span data-counter="12500" data-suffix="+">0+</span>
+          </div>
+          <div class="stat-counter__label">Documents Verified</div>
+        </div>
+
+        <div class="stat-counter" role="listitem">
+          <div class="stat-counter__value">
+            <span data-counter="96" data-suffix="%">0%</span>
+          </div>
+          <div class="stat-counter__label">AI Accuracy Rate</div>
+        </div>
+
+        <div class="stat-counter" role="listitem">
+          <div class="stat-counter__value">
+            <span data-counter="8200" data-suffix="+">0+</span>
+          </div>
+          <div class="stat-counter__label">Complaints Generated</div>
+        </div>
+
+        <div class="stat-counter" role="listitem">
+          <div class="stat-counter__value">
+            <span data-counter="28" data-suffix=" States">0</span>
+          </div>
+          <div class="stat-counter__label">States Covered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════ TESTIMONIALS ══ -->
+  <section class="section testimonials-section" id="testimonials" aria-labelledby="testimonials-title">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow">Real Stories</span>
+        <h2 class="section__title" id="testimonials-title">What Our Users Say</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <!-- Testimonial 1 -->
+        <article class="testimonial-card" data-animate="fade-in-up" aria-label="Testimonial from Rahul Sharma">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="testimonial-card__quote">"I had no idea which government office to complain to about my defective appliance. VeriLaw classified my complaint in seconds and generated a perfectly formatted complaint letter. Truly remarkable."</p>
+          <div class="testimonial-card__author">
+            <div class="avatar avatar--sm" aria-hidden="true">R</div>
+            <div>
+              <div class="testimonial-card__author-name">Rahul Sharma</div>
+              <div class="testimonial-card__author-role">Software Engineer, Bengaluru</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Testimonial 2 -->
+        <article class="testimonial-card" data-animate="fade-in-up" style="animation-delay:0.1s" aria-label="Testimonial from Priya Verma">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="testimonial-card__quote">"My landlord refused to return my deposit. VeriLaw organised all my rental documents into a timeline and drafted my complaint in under 5 minutes. The process that used to intimidate me now feels manageable."</p>
+          <div class="testimonial-card__author">
+            <div class="avatar avatar--sm" aria-hidden="true">P</div>
+            <div>
+              <div class="testimonial-card__author-name">Priya Verma</div>
+              <div class="testimonial-card__author-role">Teacher, Jaipur</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Testimonial 3 -->
+        <article class="testimonial-card" data-animate="fade-in-up" style="animation-delay:0.2s" aria-label="Testimonial from Amit Kumar">
+          <div class="testimonial-card__stars" aria-label="5 out of 5 stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <p class="testimonial-card__quote">"After a banking fraud I had dozens of screenshots but no idea how to report it. VeriLaw identified the right authority, organised my evidence chronologically, and created a submission-ready document immediately."</p>
+          <div class="testimonial-card__author">
+            <div class="avatar avatar--sm" aria-hidden="true">A</div>
+            <div>
+              <div class="testimonial-card__author-name">Amit Kumar</div>
+              <div class="testimonial-card__author-role">Business Owner, Ahmedabad</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ FAQ ══ -->
+  <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__eyebrow">Questions &amp; Answers</span>
+        <h2 class="section__title" id="faq-title">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-container accordion" aria-label="Frequently asked questions">
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false" id="faq-q1" aria-controls="faq-a1">
+            <span class="accordion-question">Is VeriLaw a substitute for a lawyer?</span>
+            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" id="faq-a1" role="region" aria-labelledby="faq-q1">
+            <p class="accordion-answer">No. VeriLaw provides legal information and procedural guidance only. It helps you prepare complaint documents and organise evidence — it does not provide legal advice. For case-specific legal counsel, consult a qualified advocate.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false" id="faq-q2" aria-controls="faq-a2">
+            <span class="accordion-question">What types of documents can I verify?</span>
+            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" id="faq-a2" role="region" aria-labelledby="faq-q2">
+            <p class="accordion-answer">VeriLaw supports JPG, JPEG, PNG, and PDF formats up to 20 MB per file. You can upload contracts, receipts, invoices, identity documents, screenshots, and photographs. Audio evidence (MP3, WAV) is also accepted for complaint packages.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false" id="faq-q3" aria-controls="faq-a3">
+            <span class="accordion-question">How accurate is the AI classification?</span>
+            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" id="faq-a3" role="region" aria-labelledby="faq-q3">
+            <p class="accordion-answer">Our AI model achieves ≥85% complaint classification accuracy on the categories it has been trained on. Every result includes a confidence score. When confidence is low, VeriLaw suggests an alternative authority and allows you to manually select the correct category.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false" id="faq-q4" aria-controls="faq-a4">
+            <span class="accordion-question">Is my data secure and private?</span>
+            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" id="faq-a4" role="region" aria-labelledby="faq-q4">
+            <p class="accordion-answer">Yes. VeriLaw uses JWT authentication, bcrypt password hashing, and encrypted storage. Your documents and personal data are never shared with third parties. Each user can only access their own complaints and documents.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" aria-expanded="false" id="faq-q5" aria-controls="faq-a5">
+            <span class="accordion-question">Which complaint categories are supported?</span>
+            <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="accordion-content" id="faq-a5" role="region" aria-labelledby="faq-q5">
+            <p class="accordion-answer">Consumer complaints, labour disputes, tenant-landlord issues, RTI applications, FIR requests, cyber crime, domestic violence, municipal complaints, banking disputes, and insurance complaints. New categories are added regularly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ CTA ══ -->
+  <section class="cta-section" aria-labelledby="cta-title">
+    <div class="container">
+      <span class="section__eyebrow" style="color:rgba(255,255,255,0.7)">Start Today</span>
+      <h2 class="section__title" id="cta-title">Ready to Verify Your Documents?</h2>
+      <p class="section__subtitle">Join thousands of citizens who use VeriLaw to navigate the legal complaint process with confidence.</p>
+      <div class="flex justify-center gap-md flex-wrap" style="margin-top:var(--space-xl)">
+        <a href="register.html" class="btn btn--lg" style="background-color:white;color:var(--color-primary)">
+          Create Free Account
+        </a>
+        <a href="login.html" class="btn btn--lg btn--outline-white">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer__grid">
+      <!-- Brand -->
+      <div>
+        <div class="footer__brand">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="footer__brand-text">VeriLaw</span>
+        </div>
+        <p class="footer__tagline">Empowering citizens with accessible legal technology. Verify documents, detect fraud, prepare complaints.</p>
+        <div class="flex gap-sm">
+          <button class="btn btn--icon" data-theme-toggle aria-label="Toggle dark mode" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Platform -->
+      <nav aria-label="Platform links">
+        <h3 class="footer__heading">Platform</h3>
+        <ul class="footer__links">
+          <li><a href="#features"     class="footer__link">Features</a></li>
+          <li><a href="#how-it-works" class="footer__link">How It Works</a></li>
+          <li><a href="register.html" class="footer__link">Get Started</a></li>
+          <li><a href="login.html"    class="footer__link">Login</a></li>
+        </ul>
+      </nav>
+
+      <!-- Legal -->
+      <nav aria-label="Legal links">
+        <h3 class="footer__heading">Legal</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Privacy Policy</a></li>
+          <li><a href="#" class="footer__link">Terms of Service</a></li>
+          <li><a href="#" class="footer__link">Disclaimer</a></li>
+          <li><a href="#faq" class="footer__link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <!-- Support -->
+      <nav aria-label="Support links">
+        <h3 class="footer__heading">Support</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Help Centre</a></li>
+          <li><a href="#" class="footer__link">Contact Us</a></li>
+          <li><a href="#" class="footer__link">Accessibility</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">&copy; 2026 VeriLaw. All rights reserved.</p>
+      <p class="footer__disclaimer">VeriLaw provides legal information and procedural guidance only. It does not constitute legal advice and is not a substitute for a qualified legal professional. Consult an advocate for case-specific legal counsel.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════ SCRIPTS ══ -->
+<script src="js/utils.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

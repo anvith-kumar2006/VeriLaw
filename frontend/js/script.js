@@ -177,8 +177,11 @@ const VLAPI = {
     try {
       const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers, signal: controller.signal });
       clearTimeout(timeout);
-      if (!response.ok) return { success: false, message: `Error ${response.status}`, data: null };
-      return await response.json();
+      const data = await response.json().catch(() => null);
+      if (!response.ok) {
+        return { success: false, message: data?.message || `Error ${response.status}`, data: data?.details || null };
+      }
+      return data;
     } catch (err) {
       clearTimeout(timeout);
       return { success: false, message: err.name === 'AbortError' ? 'Timeout' : 'Network Error', data: null };
@@ -187,37 +190,47 @@ const VLAPI = {
 
   // Auth
   async loginUser(credentials) {
-    return new Promise(res => setTimeout(() => res({ success: true, data: { token: 'stub', user: { full_name: 'Demo User', email: credentials.email, role: 'citizen' } } }), 1000));
+    return await this.request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials)
+    });
   },
   async registerUser(userData) {
-    return new Promise(res => setTimeout(() => res({ success: true, message: 'Registered' }), 1200));
+    return await this.request('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(userData)
+    });
   },
   async logoutUser() {
-    return new Promise(res => setTimeout(() => res({ success: true }), 300));
+    return await this.request('/auth/logout', {
+      method: 'POST'
+    });
   },
 
   // Dashboard & Data
   async fetchDashboard() {
-    return new Promise(res => setTimeout(() => res({
-      success: true,
-      data: {
-        stats: { documents_verified: 24, pending_verifications: 3, fraud_alerts: 1, recent_uploads: 7 },
-        recent_activity: [{ id: 1, type: 'upload', title: 'Doc Uploaded', description: 'Aadhaar.pdf uploaded.', time: new Date().toISOString() }],
-        recent_documents: [{ id: 1, name: 'Rental Agreement', category: 'Legal', status: 'Verified', date: new Date().toISOString() }]
-      }
-    }), 800));
-  },
-  async fetchNotifications() {
-    return new Promise(res => setTimeout(() => res({ success: true, data: { unread_count: 2, notifications: [{ id: 1, title: 'Complete', text: 'Verified', time: new Date().toISOString(), read: false }] } }), 600));
-  },
-  async uploadDocument(formData, onProgress) {
-    return new Promise(res => {
-      let pct = 0;
-      const int = setInterval(() => { pct += 20; if(onProgress) onProgress(Math.min(pct, 95)); if(pct >= 100) clearInterval(int); }, 200);
-      setTimeout(() => { if(onProgress) onProgress(100); res({ success: true, data: { file_id: 123 } }); }, 1500);
+    return await this.request('/reports/summary', {
+      method: 'GET'
     });
   },
-  async deleteDocument(id) { return new Promise(res => setTimeout(() => res({ success: true }), 400)); }
+  async fetchNotifications() {
+    return await this.request('/notifications', {
+      method: 'GET'
+    });
+  },
+  async uploadDocument(formData, onProgress) {
+    // onProgress is not supported by native fetch easily, but we can call the endpoint
+    return await this.request('/evidence/upload', {
+      method: 'POST',
+      body: formData,
+      isFormData: true
+    });
+  },
+  async deleteDocument(id) { 
+    return await this.request(`/evidence/${id}`, {
+      method: 'DELETE'
+    });
+  }
 };
 window.VLAPI = VLAPI;
 
@@ -313,7 +326,7 @@ function initLoginForm() {
       setTimeout(() => window.location.href = 'dashboard.html', 1000);
     } else {
       VLHelpers.setButtonLoading(document.getElementById('login-submit'), false, 'Login');
-      VLUtils.showToast({ type: 'error', title: 'Login Failed' });
+      VLUtils.showToast({ type: 'error', title: res.message || 'Login Failed' });
     }
   };
 }
@@ -321,18 +334,34 @@ function initLoginForm() {
 function initRegisterForm() {
   const form = document.getElementById('register-form');
   if (!form) return;
-  const email = document.getElementById('reg-email'), pass = document.getElementById('reg-password'), meter = document.getElementById('password-strength');
+  const name = document.getElementById('reg-name');
+  const email = document.getElementById('reg-email');
+  const phone = document.getElementById('reg-phone');
+  const pass = document.getElementById('reg-password');
+  const confirmPass = document.getElementById('reg-confirm-password');
+  const meter = document.getElementById('password-strength');
+
   pass.oninput = () => VLValidation.updatePasswordStrengthUI(pass.value, meter);
 
   form.onsubmit = async (e) => {
     e.preventDefault();
+    if (pass.value !== confirmPass.value) {
+      VLUtils.showToast({ type: 'error', title: 'Passwords do not match' });
+      return;
+    }
     VLHelpers.setButtonLoading(document.getElementById('register-submit'), true, 'Creating...');
-    const res = await VLAPI.registerUser({});
+    const res = await VLAPI.registerUser({
+      full_name: name.value,
+      email: email.value,
+      mobile: phone.value,
+      password: pass.value
+    });
     if (res.success) {
       VLUtils.showToast({ type: 'success', title: 'Account Created' });
       setTimeout(() => window.location.href = 'login.html', 1500);
     } else {
       VLHelpers.setButtonLoading(document.getElementById('register-submit'), false, 'Create Account');
+      VLUtils.showToast({ type: 'error', title: res.message || 'Registration failed' });
     }
   };
 }

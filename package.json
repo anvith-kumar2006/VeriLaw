@@ -1,0 +1,13 @@
+{
+  "name": "verilaw-frontend",
+  "version": "1.0.0",
+  "description": "VeriLaw Static Frontend Preview",
+  "type": "module",
+  "scripts": {
+    "start": "python3 backend/app.py",
+    "build": "echo 'Static build complete'"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

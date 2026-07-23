@@ -39,7 +39,7 @@ logger = logging.getLogger("verilaw")
 # APP CONFIGURATION
 # ═══════════════════════════════════════════════════════════════════
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend")), static_url_path="/")
 
 # ── Database URL ──────────────────────────────────────────────────
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
@@ -1956,6 +1956,21 @@ def init_db():
 
     db.session.commit()
     logger.info("Database seeded. Admin: admin@judiciaryflow.in / Admin@123456")
+
+
+# ═══════════════════════════════════════════════════════════════════
+# STATIC FILES (Frontend)
+# ═══════════════════════════════════════════════════════════════════
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve(path):
+    if path.startswith("api/"):
+        return jsonify({"success": False, "message": "API endpoint not found"}), 404
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, "index.html")
 
 
 # ═══════════════════════════════════════════════════════════════════

@@ -219,6 +219,24 @@ CREATE TABLE IF NOT EXISTS reports (
     CONSTRAINT fk_reports_user FOREIGN KEY (generated_by) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- ─── CASES ─────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS cases (
+    id          INT          NOT NULL AUTO_INCREMENT,
+    user_id     INT          NOT NULL,
+    title       VARCHAR(255) NOT NULL,
+    category    VARCHAR(100) NOT NULL,
+    description TEXT         DEFAULT NULL,
+    status      ENUM('Draft','Active','Verification Running','Complaint Generated','Resolved','Archived') NOT NULL DEFAULT 'Draft',
+    priority    ENUM('Low','Medium','High','Critical') NOT NULL DEFAULT 'Medium',
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_cases_user_id (user_id),
+    INDEX idx_cases_status (status),
+    INDEX idx_cases_priority (priority),
+    CONSTRAINT fk_cases_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 -- ─── VIEWS ─────────────────────────────────────────────────────
 CREATE OR REPLACE VIEW complaint_summary AS
 SELECT

@@ -8,6 +8,9 @@
     "build": "echo 'Static build complete'"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "cors": "^2.8.6",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0"
   }
 }

@@ -1,398 +1,403 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — VeriLaw</title>
-  <meta name="description" content="Your VeriLaw dashboard — verify documents, review fraud alerts, and manage complaints.">
-  <meta name="robots" content="noindex">
+  <title>VeriLaw AI — Premium Legal Assistant</title>
+  <meta name="description" content="Premium legal intelligence assistant — document verification, fraud detection, and complaint drafting.">
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 </head>
-<body class="app-shell">
+<body class="app-shell premium-chat-body">
 
-<!-- ═══════════════════════════════════════════════ SIDEBAR OVERLAY ══ -->
-<div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+  <!-- Sidebar Overlay for Mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════════════════ SIDEBAR ══ -->
-<aside class="sidebar" id="sidebar" aria-label="Main navigation">
-
-  <!-- Brand -->
-  <a href="index.html" class="sidebar__brand" aria-label="VeriLaw home">
-    <img src="assets/logo.svg" alt="VeriLaw" width="120" height="32" class="sidebar__brand-logo">
-  </a>
-
-  <!-- Navigation -->
-  <nav class="sidebar__nav" role="navigation" aria-label="Dashboard navigation">
-    <!-- Main section -->
-    <span class="sidebar__section-label">Main</span>
-
-    <a href="dashboard.html" class="sidebar__nav-item active" aria-current="page" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-      <span class="sidebar__nav-label">Overview</span>
-    </a>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span class="sidebar__nav-label">My Documents</span>
-    </a>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span class="sidebar__nav-label">Upload &amp; Verify</span>
-    </a>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span class="sidebar__nav-label">Fraud Alerts</span>
-      <span class="badge badge--danger badge--sm" style="margin-left:auto" aria-label="1 fraud alert">1</span>
-    </a>
-
-    <div class="sidebar__divider"></div>
-    <span class="sidebar__section-label">Complaints</span>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      <span class="sidebar__nav-label">New Complaint</span>
-    </a>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span class="sidebar__nav-label">Complaint History</span>
-    </a>
-
-    <div class="sidebar__divider"></div>
-    <span class="sidebar__section-label">Account</span>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
-      <span class="sidebar__nav-label">Profile</span>
-    </a>
-
-    <a href="#" class="sidebar__nav-item" role="menuitem">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-      <span class="sidebar__nav-label">Settings</span>
-    </a>
-  </nav>
-
-  <!-- Sidebar Footer (User Card) -->
-  <div class="sidebar__footer">
-    <div class="sidebar__user-card">
-      <div class="avatar avatar--sm" aria-hidden="true" data-user-initial>D</div>
-      <div class="sidebar__user-info">
-        <div class="sidebar__user-name" data-user-name>Demo User</div>
-        <div class="sidebar__user-role" data-user-email>demo@verilaw.in</div>
+  <!-- ════════════════════════════════════════════ LEFT SIDEBAR ══ -->
+  <aside class="premium-sidebar" id="premium-sidebar" aria-label="VeriLaw Sidebar">
+    <div class="sidebar-top">
+      <!-- Brand & Collapse Trigger -->
+      <div class="sidebar-brand-wrapper">
+        <a href="index.html" class="sidebar-logo-link" id="logo-branding">
+          <span class="logo-accent">Veri</span>Law <span class="logo-sub">AI</span>
+        </a>
+        <button class="sidebar-toggle-btn" id="sidebar-collapse-btn" title="Collapse Sidebar" aria-label="Collapse Sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
       </div>
-    </div>
-    <button class="sidebar__nav-item" data-action="logout" style="margin-top:var(--space-xs);color:var(--color-danger)" aria-label="Logout">
-      <svg class="sidebar__nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      <span class="sidebar__nav-label">Logout</span>
-    </button>
-  </div>
-</aside>
 
-<!-- ══════════════════════════════════════════════════ MAIN CONTENT ══ -->
-<div class="main-content" id="main-content">
-
-  <!-- ─────────────────────────────────────────── HEADER ── -->
-  <header class="header" role="banner">
-    <div class="header__inner">
-      <!-- Mobile hamburger -->
-      <button class="header__hamburger" id="header-hamburger" aria-label="Open sidebar" aria-expanded="false" aria-controls="sidebar">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+      <!-- New Chat Button -->
+      <button class="btn-new-chat" id="new-chat-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>New Chat</span>
       </button>
 
-      <!-- Breadcrumb -->
-      <nav aria-label="Breadcrumb" class="header__breadcrumb">
-        <span>Dashboard</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-        <span class="header__breadcrumb-current">Overview</span>
-      </nav>
+      <!-- Recent Chats divided by periods -->
+      <div class="recent-chats-container" id="recent-chats-container">
+        <!-- Today section -->
+        <div class="recent-section" id="section-today">
+          <div class="recent-header">Today</div>
+          <div class="recent-list" id="threads-today">
+            <!-- Dynamic items -->
+          </div>
+        </div>
 
-      <!-- Search -->
-      <div class="header__search" role="search">
-        <svg class="header__search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="search" class="header__search-input" placeholder="Search documents, complaints…" aria-label="Search">
+        <!-- Yesterday section -->
+        <div class="recent-section" id="section-yesterday">
+          <div class="recent-header">Yesterday</div>
+          <div class="recent-list" id="threads-yesterday">
+            <!-- Dynamic items -->
+          </div>
+        </div>
+
+        <!-- Previous Week section -->
+        <div class="recent-section" id="section-prevweek">
+          <div class="recent-header">Previous Week</div>
+          <div class="recent-list" id="threads-prevweek">
+            <!-- Dynamic items -->
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Header actions -->
-      <div class="header__actions">
-        <!-- Theme toggle -->
-        <button class="btn btn--icon" data-theme-toggle aria-label="Toggle dark mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    <!-- Navigation List -->
+    <nav class="sidebar-nav-menu">
+      <span class="menu-label">Workspace Modules</span>
+      <a href="#" class="nav-item active" id="nav-chat-assistant">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>AI Assistant</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-my-documents">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>My Documents</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-fraud-alerts">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Fraud Alerts</span>
+        <span class="badge badge--danger badge--sm nav-badge" id="nav-badge-alerts">1</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-complaint-history">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Complaint History</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-legal-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Legal Search</span>
+      </a>
+      <a href="#" class="nav-item" id="nav-settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Profile Footer -->
+    <div class="sidebar-profile-footer">
+      <div class="profile-card">
+        <div class="avatar-container">
+          <div class="user-avatar-premium" data-user-initial>U</div>
+          <span class="status-indicator online"></span>
+        </div>
+        <div class="profile-details">
+          <span class="user-display-name" data-user-name>Legal Practitioner</span>
+          <span class="user-display-email" data-user-email>user@verilaw.in</span>
+        </div>
+        <button class="btn-logout-sidebar" data-action="logout" title="Sign Out" aria-label="Sign Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         </button>
+      </div>
+    </div>
+  </aside>
 
+  <!-- ═══════════════════════════════════════ MAIN ASSISTANT AREA ══ -->
+  <main class="premium-main-layout" id="premium-main-layout">
+    
+    <!-- Top Floating Header bar -->
+    <header class="chat-top-bar">
+      <div class="top-bar-left">
+        <!-- Sidebar Toggle Trigger -->
+        <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="Toggle Navigation Sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div class="current-chat-header-info">
+          <h2 id="current-thread-title">General Legal Assistant</h2>
+          <span class="model-badge">
+            <span class="pulse-dot"></span>
+            VeriLaw LLM 2.5
+          </span>
+        </div>
+      </div>
+      
+      <div class="top-bar-right">
+        <!-- Theme Toggle -->
+        <button class="top-bar-action-btn" data-theme-toggle aria-label="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        
         <!-- Notifications -->
-        <div style="position:relative">
-          <button class="btn btn--icon" data-modal-open="notifications-modal" aria-label="Notifications" aria-haspopup="dialog">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div style="position:relative;">
+          <button class="top-bar-action-btn" data-modal-open="notifications-modal" aria-label="Notifications">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-count-dot" id="notification-badge">0</span>
           </button>
-          <span class="badge badge--danger" id="notification-badge" style="position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;" aria-label="2 unread notifications">2</span>
         </div>
 
-        <!-- User avatar -->
-        <div class="avatar avatar--sm" aria-hidden="true" data-user-initial>D</div>
-      </div>
-    </div>
-  </header>
-
-  <!-- ─────────────────────────────────────── PAGE CONTENT ── -->
-  <main class="page-content" aria-label="Dashboard overview">
-
-    <!-- Welcome Card -->
-    <div class="welcome-card" role="region" aria-label="Welcome section">
-      <div class="welcome-card__date" id="welcome-date" aria-label="Today's date"></div>
-      <p class="welcome-card__greeting">Good day,</p>
-      <h1 class="welcome-card__name" data-user-name>Demo User</h1>
-      <p class="welcome-card__message">You have <strong>3 pending verifications</strong> and <strong>1 unresolved fraud alert</strong>. Upload new documents or generate a complaint below.</p>
-      <div class="welcome-card__actions">
-        <button class="welcome-card__btn welcome-card__btn--primary" data-modal-open="upload-modal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Upload Document
-        </button>
-        <button class="welcome-card__btn welcome-card__btn--outline">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          New Complaint
+        <!-- Toggle Detail Panel Button -->
+        <button class="top-bar-action-btn" id="toggle-detail-btn" title="Toggle Document Analysis Drawer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="15" y1="3" x2="15" y2="21"></line></svg>
         </button>
       </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="premium-chat-workspace-inner">
+      
+      <!-- Conversational Stream (Center Frame) -->
+      <div class="chat-viewport-container">
+        <!-- Chat History Stream -->
+        <div class="chat-history-viewport" id="chat-stream">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Welcome View Placeholder (shown when stream is empty) -->
+        <div class="chat-welcome-container hidden" id="chat-welcome-screen">
+          <div class="welcome-hero-brand">
+            <div class="brand-badge-premium">VeriLaw AI Intelligence</div>
+            <h1 class="welcome-title">👋 Welcome to VeriLaw AI</h1>
+            <p class="welcome-subtitle">Your Personal Legal Intelligence Assistant</p>
+          </div>
+
+          <div class="welcome-features-grid">
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Verify Documents</h3>
+                <p>Verify notary seals, digital signatures, stamp values, and registration records.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Detect Fraud</h3>
+                <p>AI scans and highlights stamp mismatches, signature gaps, and clause manipulation.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Generate Complaints</h3>
+                <p>Instantly draft legal-grade complaints cited under Consumer Protection or Stamp Acts.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Search Indian Laws</h3>
+                <p>Get accurate references and sections from the Bharatiya Nyaya Sanhita (BNS) &amp; IPC.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Explain Legal Rights</h3>
+                <p>Demystify complex clauses, liabilities, and lease terms into simple, actionable summaries.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-bullet">✔</div>
+              <div class="feature-text">
+                <h3>Draft Legal Notices</h3>
+                <p>Write high-fidelity demand notices, property transaction drafts, and eviction answers.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggested Prompt Cards -->
+          <div class="suggested-prompts-section">
+            <h3 class="suggested-prompts-title">Explore Suggested Directives</h3>
+            <div class="suggested-prompts-grid">
+              <button class="prompt-suggest-card" data-prompt="Analyze this contract for fraud, notary signature validation, or stamp mismatches. (Please upload your contract file first.)">
+                <div class="card-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div class="card-text">
+                  <h4>Verify this document</h4>
+                  <p>Audit signatures and stamp validity.</p>
+                </div>
+              </button>
+              
+              <button class="prompt-suggest-card" data-prompt="Run fraud detection on my uploaded property deed to highlight stamp duty matches, notary stamp dates, and any signature anomalies.">
+                <div class="card-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <div class="card-text">
+                  <h4>Detect Fraud</h4>
+                  <p>Check for fake stamps &amp; backdating.</p>
+                </div>
+              </button>
+
+              <button class="prompt-suggest-card" data-prompt="Draft a formal consumer complaint for deficiency of services, including sections and citations under the Consumer Protection Act.">
+                <div class="card-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="card-text">
+                  <h4>Draft Complaint</h4>
+                  <p>Generate formal legal complaints.</p>
+                </div>
+              </button>
+
+              <button class="prompt-suggest-card" data-prompt="Explain Section 17 of the Indian Registration Act, and search relevant BNS (Bharatiya Nyaya Sanhita) code references.">
+                <div class="card-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="card-text">
+                  <h4>Search BNS</h4>
+                  <p>Reference registration laws.</p>
+                </div>
+              </button>
+
+              <button class="prompt-suggest-card" data-prompt="What are the legal implications and liabilities if a notary witnesses an unsigned document?">
+                <div class="card-icon-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
+                </div>
+                <div class="card-text">
+                  <h4>Ask Legal Question</h4>
+                  <p>Inquire about notary liability &amp; laws.</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Float Input Area at Bottom -->
+        <div class="chat-input-sticky-footer">
+          <!-- Floating toolbar action pills -->
+          <div class="floating-pills-bar">
+            <button class="toolbar-pill" id="upload-doc-shortcut" title="Upload property deed or contract">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Upload Document</span>
+            </button>
+            <button class="toolbar-pill" id="btn-suggest-dispute" data-prompt="Draft a robust legal notice for rent default, setting a 15-day rectification timeline.">
+              <span>Eviction/Lease Draft</span>
+            </button>
+            <button class="toolbar-pill" id="btn-suggest-registration" data-prompt="List the stamp duty slabs and registration fees in New Delhi for property agreements under Section 17.">
+              <span>Stamp Duty Slabs</span>
+            </button>
+          </div>
+
+          <!-- Main Input Form Box -->
+          <form class="premium-chat-form" id="chat-input-form">
+            <div class="chat-input-glowing-box">
+              <!-- Upload/Attachment Trigger -->
+              <button type="button" class="btn-input-accessory" id="chat-upload-btn" title="Attach Document (PDF/JPG/PNG)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+              </button>
+              <input type="file" id="chat-file-input" style="display:none" accept=".pdf,.png,.jpg,.jpeg">
+
+              <!-- Microphone Accessory -->
+              <button type="button" class="btn-input-accessory" id="chat-mic-btn" title="Use Voice Input">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"></path></svg>
+              </button>
+
+              <!-- Textarea (Auto-expandable) -->
+              <textarea class="premium-textarea" id="chat-textarea" placeholder="Send a message, upload legal evidence, or dictate query..." rows="1" required></textarea>
+
+              <!-- Send Button -->
+              <button type="submit" class="btn-send-message" id="chat-send-btn" title="Transmit Directive">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+            <div class="chat-input-disclaimer">VeriLaw AI can make mistakes. Always verify primary sources &amp; registration indices.</div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Detachable Right Panel (Analysis & OCR metadata) -->
+      <aside class="analysis-drawer-panel closed" id="chat-detail-panel">
+        <div class="drawer-header">
+          <h3 class="drawer-title">Evidence Workspace</h3>
+          <button class="btn-close-drawer" id="btn-close-drawer-panel" title="Close Workspace Drawer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <div class="drawer-scroller">
+          <div class="drawer-section">
+            <h4 class="section-subtitle">Workspace Documents</h4>
+            <div class="workspace-files-list" id="workspace-files-list">
+              <!-- Populated by JS -->
+              <p class="empty-files-text">No files loaded in this thread. Upload documents to activate the visual fraud dashboard.</p>
+            </div>
+          </div>
+
+          <!-- Document Fraud Analysis Summary -->
+          <div class="drawer-section document-analysis-section hidden" id="document-analysis-section">
+            <div class="section-title-wrapper">
+              <h4 class="section-subtitle">Fraud Audit Dashboard</h4>
+              <span class="badge badge--success" id="analysis-status">Completed</span>
+            </div>
+            
+            <div class="premium-analysis-card">
+              <div class="analysis-row">
+                <span class="analysis-label">Document Type:</span>
+                <span class="analysis-val font-semibold" id="analysis-doc-type">Property Agreement</span>
+              </div>
+              <div class="analysis-row border-t border-b border-dark-border py-2 my-2" style="border-color: rgba(255,255,255,0.08); padding-top: 8px; padding-bottom: 8px; margin-top: 8px; margin-bottom: 8px;">
+                <span class="analysis-label">Fraud Probability:</span>
+                <div class="risk-meter-wrapper">
+                  <span class="analysis-val font-semibold" id="analysis-fraud-prob">92%</span>
+                  <div class="risk-bar-bg">
+                    <div class="risk-bar-fill risk-bar-fill--high" id="risk-bar-fill" style="width: 92%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="analysis-row mb-2">
+                <span class="analysis-label">Confidence Index:</span>
+                <span class="analysis-val font-semibold text-primary" id="analysis-confidence">0.94</span>
+              </div>
+              <div class="analysis-row">
+                <span class="analysis-label">Audited On:</span>
+                <span class="analysis-val" id="analysis-date">July 24, 2026</span>
+              </div>
+            </div>
+
+            <div class="analysis-ocr-box">
+              <div class="ocr-box-header">Extracted Text Preview (OCR)</div>
+              <pre class="ocr-box-content" id="analysis-ocr-content"></pre>
+            </div>
+            
+            <div class="drawer-actions-stack">
+              <button class="btn btn--outline btn--sm w-full btn-premium-secondary" id="btn-reverify">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Re-verify Document
+              </button>
+              <button class="btn btn--danger btn--sm w-full btn-premium-danger" id="btn-flag-fraud">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                Flag as Active Fraud
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
     </div>
-
-    <!-- ──────────────────────────────────── STAT CARDS ── -->
-    <section aria-labelledby="stats-heading">
-      <h2 id="stats-heading" class="sr-only">Statistics overview</h2>
-      <div class="stats-grid" role="list">
-
-        <!-- Documents Verified -->
-        <article class="stat-card" role="listitem" aria-labelledby="stat-1-label">
-          <div data-skeleton class="skeleton" style="height:100px;border-radius:var(--radius-md);" aria-hidden="true"></div>
-          <div data-content class="hidden">
-            <div class="stat-card__body">
-              <div class="stat-card__icon stat-card__icon--primary" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-              </div>
-              <div class="stat-card__info">
-                <span class="stat-card__label" id="stat-1-label">Documents Verified</span>
-                <span class="stat-card__value" id="stat-documents-verified" aria-live="polite">0</span>
-                <span class="stat-card__change stat-card__change--up">+3 this week</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Pending Verifications -->
-        <article class="stat-card" role="listitem" aria-labelledby="stat-2-label">
-          <div data-skeleton class="skeleton" style="height:100px;border-radius:var(--radius-md);" aria-hidden="true"></div>
-          <div data-content class="hidden">
-            <div class="stat-card__body">
-              <div class="stat-card__icon stat-card__icon--warning" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              <div class="stat-card__info">
-                <span class="stat-card__label" id="stat-2-label">Pending Verifications</span>
-                <span class="stat-card__value" id="stat-pending" aria-live="polite">0</span>
-                <span class="stat-card__change stat-card__change--neutral">Awaiting AI review</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Fraud Alerts -->
-        <article class="stat-card" role="listitem" aria-labelledby="stat-3-label">
-          <div data-skeleton class="skeleton" style="height:100px;border-radius:var(--radius-md);" aria-hidden="true"></div>
-          <div data-content class="hidden">
-            <div class="stat-card__body">
-              <div class="stat-card__icon stat-card__icon--danger" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-              </div>
-              <div class="stat-card__info">
-                <span class="stat-card__label" id="stat-3-label">Fraud Alerts</span>
-                <span class="stat-card__value" id="stat-alerts" aria-live="polite">0</span>
-                <span class="stat-card__change stat-card__change--down">Requires attention</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Recent Uploads -->
-        <article class="stat-card" role="listitem" aria-labelledby="stat-4-label">
-          <div data-skeleton class="skeleton" style="height:100px;border-radius:var(--radius-md);" aria-hidden="true"></div>
-          <div data-content class="hidden">
-            <div class="stat-card__body">
-              <div class="stat-card__icon stat-card__icon--accent" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              </div>
-              <div class="stat-card__info">
-                <span class="stat-card__label" id="stat-4-label">Recent Uploads</span>
-                <span class="stat-card__value" id="stat-uploads" aria-live="polite">0</span>
-                <span class="stat-card__change stat-card__change--up">+2 today</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- ──────────────────────────────── MAIN DASHBOARD GRID ── -->
-    <div class="dashboard-grid dashboard-grid--3">
-
-      <!-- Left: Analytics + Recent Docs -->
-      <div>
-        <!-- Analytics Placeholder Card -->
-        <div class="card" style="margin-bottom:var(--space-lg);" aria-labelledby="analytics-heading">
-          <div class="card__header">
-            <h2 class="card__title" id="analytics-heading">Verification Activity</h2>
-            <p class="card__subtitle">Document verifications — last 7 days</p>
-          </div>
-          <div class="card__body">
-            <!-- Analytics placeholder chart -->
-            <div class="analytics-placeholder" aria-label="Bar chart: document verifications over the past 7 days">
-              <div class="analytics-placeholder__chart" id="analytics-chart" aria-hidden="true">
-                <!-- Filled by dashboard.js initAnalyticsPlaceholder() -->
-                <div class="analytics-bar" style="height:55%"></div>
-                <div class="analytics-bar" style="height:80%"></div>
-                <div class="analytics-bar" style="height:65%"></div>
-                <div class="analytics-bar" style="height:90%"></div>
-                <div class="analytics-bar" style="height:72%"></div>
-                <div class="analytics-bar" style="height:85%"></div>
-                <div class="analytics-bar analytics-bar--active" style="height:78%"></div>
-              </div>
-              <div class="analytics-placeholder__labels" aria-hidden="true">
-                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-              </div>
-              <div class="analytics-placeholder__summary">
-                <span class="badge badge--success badge--dot">96% accuracy</span>
-                <span class="text-secondary text-sm">Based on AI verification results</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent Documents Table -->
-        <div class="card" aria-labelledby="docs-heading">
-          <div class="card__header">
-            <h2 class="card__title" id="docs-heading">Recent Documents</h2>
-            <a href="#" class="card__action">View all</a>
-          </div>
-          <div class="card__body" style="padding:0">
-            <div style="overflow-x:auto">
-              <table class="table" aria-label="Recent documents">
-                <thead>
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="documents-tbody">
-                  <!-- Skeletons -->
-                  <tr data-skeleton>
-                    <td colspan="5"><div class="skeleton skeleton--text"></div></td>
-                  </tr>
-                  <tr data-skeleton>
-                    <td colspan="5"><div class="skeleton skeleton--text" style="width:70%"></div></td>
-                  </tr>
-                  <tr data-skeleton>
-                    <td colspan="5"><div class="skeleton skeleton--text" style="width:80%"></div></td>
-                  </tr>
-                  <!-- Real content appended by dashboard.js -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Recent Activity + Notifications -->
-      <div style="display:flex;flex-direction:column;gap:var(--space-lg)">
-
-        <!-- Recent Activity -->
-        <div class="card" aria-labelledby="activity-heading">
-          <div class="card__header">
-            <h2 class="card__title" id="activity-heading">Recent Activity</h2>
-            <a href="#" class="card__action">View all</a>
-          </div>
-          <div class="card__body" style="padding:var(--space-md)">
-            <div data-skeleton>
-              <div class="skeleton skeleton--text" style="margin-bottom:12px"></div>
-              <div class="skeleton skeleton--text" style="width:75%;margin-bottom:12px"></div>
-              <div class="skeleton skeleton--text" style="width:90%"></div>
-            </div>
-            <div id="activity-list" class="activity-list hidden" data-content aria-live="polite" aria-label="Recent activity list">
-              <!-- Populated by dashboard.js -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Notifications -->
-        <div class="card" aria-labelledby="notifications-heading">
-          <div class="card__header">
-            <h2 class="card__title" id="notifications-heading">Notifications</h2>
-            <span class="badge badge--primary" id="notification-badge-card" aria-label="Unread notifications">2</span>
-          </div>
-          <div class="card__body" style="padding:var(--space-md)">
-            <div id="notification-list" class="notification-list" aria-live="polite" aria-label="Notifications list">
-              <!-- Populated by dashboard.js -->
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
   </main>
 </div>
 
-<!-- ═══════════════════════════════════════ UPLOAD DOCUMENT MODAL ══ -->
-<div class="modal-backdrop" id="upload-modal" role="dialog" aria-modal="true" aria-labelledby="upload-modal-title">
-  <div class="modal" style="max-width:540px">
-    <div class="modal__header">
-      <h2 class="modal__title" id="upload-modal-title">Upload Document</h2>
-      <button class="modal__close" data-modal-close aria-label="Close upload dialog">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal__body">
-      <p class="text-secondary text-sm" style="margin-bottom:var(--space-lg)">
-        Upload JPG, PNG, PDF, or audio files (MP3/WAV). Maximum 20 MB per file. Our AI will verify authenticity and flag any issues.
-      </p>
-
-      <!-- File Upload Zone -->
-      <div class="file-upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="File upload area. Click or drag and drop to upload." aria-describedby="upload-hint">
-        <div class="file-upload-zone__icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </div>
-        <p class="file-upload-zone__title">Drag &amp; drop files here</p>
-        <p class="file-upload-zone__hint" id="upload-hint">or click to browse your device</p>
-        <span class="file-upload-zone__types">JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; PDF &nbsp;·&nbsp; MP3 &nbsp;·&nbsp; WAV</span>
-        <input type="file" id="file-input" class="file-upload-zone__input" multiple accept=".jpg,.jpeg,.png,.pdf,.mp3,.wav" aria-hidden="true" tabindex="-1">
-      </div>
-
-      <!-- File List (populated by JS) -->
-      <div id="upload-file-list" style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm)" aria-label="Files queued for upload" aria-live="polite"></div>
-    </div>
-    <div class="modal__footer">
-      <button class="btn btn--secondary" data-modal-close>Cancel</button>
-      <button class="btn btn--primary" onclick="window.VLUtils.showToast({type:'info',title:'Tip',message:'Select a file first by clicking the upload zone.'})">Upload Files</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════ NOTIFICATIONS MODAL ══ -->
+<!-- Modal Backdrops -->
 <div class="modal-backdrop" id="notifications-modal" role="dialog" aria-modal="true" aria-labelledby="notif-modal-title">
-  <div class="modal" style="max-width:420px">
+  <div class="modal modal-premium-dark" style="max-width:420px">
     <div class="modal__header">
-      <h2 class="modal__title" id="notif-modal-title">Notifications</h2>
+      <h2 class="modal__title" id="notif-modal-title">Alert &amp; Notifications</h2>
       <button class="modal__close" data-modal-close aria-label="Close notifications">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal__body" style="padding:0">
-      <div id="notification-list" class="notification-list" style="padding:var(--space-md)" aria-live="polite" aria-label="Notifications">
-        <!-- Populated by dashboard.js -->
-        <div class="text-secondary text-sm" style="padding:var(--space-md)">Loading notifications…</div>
+      <div id="notification-list" class="notification-list" style="padding:var(--space-md)" aria-live="polite">
+        <div class="text-secondary text-sm" style="padding:var(--space-md); text-align:center">Loading notifications…</div>
       </div>
     </div>
     <div class="modal__footer">
@@ -402,11 +407,6 @@
   </div>
 </div>
 
-<!-- Visually-hidden utility class used by stat cards -->
-<style>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}</style>
-
-<!-- ════════════════════════════════════════════════════ SCRIPTS ══ -->
-<!-- Remove all previous JS script tags and replace with: -->
 <script src="js/script.js"></script>
 </body>
 </html>

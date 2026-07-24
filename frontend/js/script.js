@@ -367,107 +367,76 @@ function initRegisterForm() {
 }
 
 /* =======================================================
-DASHBOARD & NOTIFICATIONS
+DASHBOARD, SIDEBAR & NOTIFICATIONS
 ======================================================= */
 const VLDashboard = {
-  async initDashboard() {
-    VLAuth.requireAuth();
-    this.populateUserInfo();
-    const dateEl = document.getElementById('welcome-date');
-    if (dateEl) dateEl.textContent = VLUtils.getFormattedDate();
-    await this.loadDashboardData();
-    await this.loadNotifications();
-    this.initSidebar();
-    this.initUploadZone();
-    this.initAccordions();
-    this.initAnalyticsPlaceholder();
-  },
-
   populateUserInfo() {
-    const user = VLAuth.getCurrentUser() || { full_name: 'User', email: '' };
+    const user = VLAuth.getCurrentUser() || { full_name: 'Demo Practitioner', email: 'practitioner@verilaw.ai' };
     document.querySelectorAll('[data-user-name]').forEach(el => el.textContent = user.full_name);
     document.querySelectorAll('[data-user-initial]').forEach(el => el.textContent = user.full_name.charAt(0));
-  },
-
-  async loadDashboardData() {
-    const res = await VLAPI.fetchDashboard();
-    if (!res.success) return;
-    const { stats, recent_activity, recent_documents } = res.data;
-    
-    const statMap = { 'stat-documents-verified': stats.documents_verified, 'stat-pending': stats.pending_verifications, 'stat-alerts': stats.fraud_alerts, 'stat-uploads': stats.recent_uploads };
-    Object.entries(statMap).forEach(([id, val]) => VLUtils.animateCounter(document.getElementById(id), val));
-
-    const activityList = document.getElementById('activity-list');
-    if (activityList) {
-      activityList.innerHTML = recent_activity.map(item => `
-        <div class="activity-item">
-          <div class="activity-item__icon">${VLHelpers.uploadSvg()}</div>
-          <div class="activity-item__content">
-            <div class="activity-item__title">${item.title}</div>
-            <div class="activity-item__description">${item.description}</div>
-          </div>
-        </div>`).join('');
-      activityList.classList.remove('hidden');
-    }
-
-    const tbody = document.getElementById('documents-tbody');
-    if (tbody) {
-      tbody.innerHTML = recent_documents.map(doc => `
-        <tr>
-          <td>${doc.name}</td>
-          <td>${doc.category}</td>
-          <td><span class="badge badge--success">${doc.status}</span></td>
-          <td>${VLUtils.formatDate(doc.date)}</td>
-          <td><button class="btn btn--sm" data-delete="${doc.id}">Delete</button></td>
-        </tr>`).join('');
-    }
-    document.querySelectorAll('[data-skeleton]').forEach(el => el.remove());
+    document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = user.email);
   },
 
   async loadNotifications() {
     const res = await VLAPI.fetchNotifications();
     if (!res.success) return;
     const badge = document.getElementById('notification-badge');
-    if (badge) badge.textContent = res.data.unread_count;
+    if (badge) {
+      badge.textContent = res.data.unread_count;
+      badge.style.display = res.data.unread_count > 0 ? 'flex' : 'none';
+    }
     const list = document.getElementById('notification-list');
-    if (list) list.innerHTML = res.data.notifications.map(n => `<div class="notification-item"><b>${n.title}</b><p>${n.text}</p></div>`).join('');
+    if (list) {
+      if (res.data.notifications.length === 0) {
+        list.innerHTML = '<div class="text-secondary text-sm" style="text-align:center;padding:var(--space-md)">No active alerts.</div>';
+      } else {
+        list.innerHTML = res.data.notifications.map(n => `
+          <div class="notification-item" style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)">
+            <b style="font-size:12px;color:#c084fc;display:block;margin-bottom:2px;">${n.title}</b>
+            <p style="font-size:11.5px;margin:0;color:rgba(255,255,255,0.7)">${n.text}</p>
+          </div>
+        `).join('');
+      }
+    }
   },
 
   initSidebar() {
-    const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebar-overlay'), ham = document.getElementById('header-hamburger');
-    if (!sidebar) return;
-    const toggle = () => { sidebar.classList.toggle('mobile-open'); overlay.classList.toggle('active'); };
-    if (ham) ham.onclick = toggle;
-    if (overlay) overlay.onclick = toggle;
-  },
+    const sidebar = document.getElementById('premium-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const ham = document.getElementById('btn-sidebar-toggle');
+    const collapseBtn = document.getElementById('sidebar-collapse-btn');
 
-  initUploadZone() {
-    const zone = document.getElementById('upload-zone'), input = document.getElementById('file-input');
-    if (!zone || !input) return;
-    zone.onclick = () => input.click();
-    zone.ondragover = (e) => { e.preventDefault(); zone.classList.add('drag-over'); };
-    zone.ondragleave = () => zone.classList.remove('drag-over');
-    zone.ondrop = async (e) => {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      for (let f of files) {
-        if (ALLOWED_TYPES.includes(f.type)) {
-          const res = await VLAPI.uploadDocument(new FormData(), (p) => console.log(p));
-          if (res.success) VLUtils.showToast({ type: 'success', title: 'File Uploaded', message: f.name });
-        }
+    if (ham && sidebar && overlay) {
+      ham.onclick = () => {
+        sidebar.classList.toggle('mobile-open');
+        overlay.classList.toggle('active');
+      };
+      overlay.onclick = () => {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+      };
+    }
+
+    if (collapseBtn && sidebar) {
+      // Load preference
+      const isCollapsed = localStorage.getItem('vl_sidebar_collapsed') === 'true';
+      if (isCollapsed) {
+        sidebar.classList.add('collapsed');
       }
-    };
+
+      collapseBtn.onclick = () => {
+        sidebar.classList.toggle('collapsed');
+        localStorage.setItem('vl_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+        // Dispatch resize event to trigger redraws of any dynamic content
+        window.dispatchEvent(new Event('resize'));
+      };
+    }
   },
 
   initAccordions() {
     document.querySelectorAll('.accordion-header').forEach(h => {
       h.onclick = () => h.closest('.accordion-item').classList.toggle('open');
     });
-  },
-
-  initAnalyticsPlaceholder() {
-    const chart = document.getElementById('analytics-chart');
-    if (chart) chart.innerHTML = [40, 65, 55, 80, 70, 90, 75].map(v => `<div class="analytics-bar" style="height:${v}%"></div>`).join('');
   }
 };
 window.VLDashboard = VLDashboard;
@@ -477,7 +446,7 @@ THEME & MODALS
 ======================================================= */
 const VLApp = {
   initTheme() {
-    const theme = VLUtils.storageGet('vl_theme') || 'light';
+    const theme = VLUtils.storageGet('vl_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     this.updateThemeIcons(theme);
   },
@@ -490,8 +459,8 @@ const VLApp = {
   updateThemeIcons(theme) {
     document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
       btn.innerHTML = theme === 'dark' ? 
-        `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>` : 
-        `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+        `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>` : 
+        `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
     });
   },
   initModals() {
@@ -507,6 +476,738 @@ const VLApp = {
     });
   }
 };
+window.VLApp = VLApp;
+
+/* =======================================================
+CONVERSATIONAL CHAT ENGINE (VLChat)
+======================================================= */
+const VLChat = {
+  activeThreadId: null,
+  activeEvidenceId: null,
+  threads: [],
+
+  async initChat() {
+    VLAuth.requireAuth();
+    VLDashboard.populateUserInfo();
+    VLDashboard.initSidebar();
+    await VLDashboard.loadNotifications();
+    
+    this.initDOM();
+    await this.loadThreads();
+    this.initUpload();
+  },
+
+  initDOM() {
+    // Right panel drawer toggle controls
+    const toggleBtn = document.getElementById('toggle-detail-btn');
+    const closeDrawerBtn = document.getElementById('btn-close-drawer-panel');
+    const detailPanel = document.getElementById('chat-detail-panel');
+    
+    if (toggleBtn && detailPanel) {
+      toggleBtn.onclick = () => {
+        detailPanel.classList.toggle('closed');
+      };
+    }
+    if (closeDrawerBtn && detailPanel) {
+      closeDrawerBtn.onclick = () => {
+        detailPanel.classList.add('closed');
+      };
+    }
+
+    // New thread button
+    const newChatBtn = document.getElementById('new-chat-btn');
+    if (newChatBtn) {
+      newChatBtn.onclick = async () => {
+        const title = prompt("Enter a title for this new legal session/thread:", "Property Verification Workspace");
+        if (title) {
+          const res = await VLAPI.request('/complaints', {
+            method: 'POST',
+            body: JSON.stringify({
+              title: title,
+              description: "Custom session thread for AI verification & legal assistance.",
+              category_id: 1,
+              state: "National",
+              district: "AI Workspace"
+            })
+          });
+          if (res.success) {
+            VLUtils.showToast({ type: 'success', title: 'Thread Created', message: title });
+            await this.loadThreads(res.data.complaint_id);
+          } else {
+            VLUtils.showToast({ type: 'error', title: 'Error', message: res.message });
+          }
+        }
+      };
+    }
+
+    // Chat form input submission
+    const form = document.getElementById('chat-input-form');
+    const textarea = document.getElementById('chat-textarea');
+    if (form && textarea) {
+      textarea.onkeydown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      };
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const text = textarea.value.trim();
+        if (!text) return;
+        
+        textarea.value = '';
+        textarea.style.height = 'auto';
+        
+        await this.sendMessage(text);
+      };
+
+      // Auto expand textarea
+      textarea.oninput = () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+      };
+    }
+
+    // Connect all suggested prompt actions
+    document.querySelectorAll('[data-prompt]').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        if (textarea) {
+          textarea.value = btn.dataset.prompt;
+          textarea.style.height = 'auto';
+          textarea.style.height = (textarea.scrollHeight) + 'px';
+          textarea.focus();
+        }
+      };
+    });
+
+    // Navigation button binds - keep single-page chat paradigm intact
+    const navItems = {
+      'nav-chat-assistant': () => {
+        if (textarea) { textarea.focus(); }
+        VLUtils.showToast({ type: 'info', title: 'VeriLaw Assistant', message: 'Ready to receive legal directives.' });
+      },
+      'nav-my-documents': () => {
+        if (detailPanel) { detailPanel.classList.remove('closed'); }
+        VLUtils.showToast({ type: 'info', title: 'Evidence Drawer', message: 'Workspace documents listed on the right.' });
+      },
+      'nav-fraud-alerts': () => {
+        if (textarea) {
+          textarea.value = "Audit my workspace documents for fraudulent clauses or registration inconsistencies. Search relevant IPC / BNS.";
+          textarea.style.height = 'auto';
+          textarea.style.height = (textarea.scrollHeight) + 'px';
+          textarea.focus();
+        }
+      },
+      'nav-complaint-history': () => {
+        VLUtils.showToast({ type: 'info', title: 'Threads', message: 'Browse past legal complaints in your recent chats.' });
+      },
+      'nav-legal-search': () => {
+        if (textarea) {
+          textarea.value = "Search Indian law reference database for section... (Replace with desired section, e.g. Section 17 of Registration Act)";
+          textarea.focus();
+        }
+      },
+      'nav-settings': () => {
+        VLApp.toggleTheme();
+        VLUtils.showToast({ type: 'success', title: 'Theme Toggled', message: 'Sleek visual appearance switched.' });
+      }
+    };
+
+    Object.entries(navItems).forEach(([id, handler]) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.onclick = (e) => {
+          e.preventDefault();
+          document.querySelectorAll('.sidebar-nav-menu .nav-item').forEach(item => item.classList.remove('active'));
+          el.classList.add('active');
+          handler();
+        };
+      }
+    });
+
+    // Toolbar shortcuts
+    const uploadShortcut = document.getElementById('upload-doc-shortcut');
+    const chatFileInput = document.getElementById('chat-file-input');
+    if (uploadShortcut && chatFileInput) {
+      uploadShortcut.onclick = () => chatFileInput.click();
+    }
+
+    // Voice / mic alert
+    const micBtn = document.getElementById('chat-mic-btn');
+    if (micBtn) {
+      micBtn.onclick = () => {
+        VLUtils.showToast({ type: 'info', title: 'Voice Input Enabled', message: 'Speak clearly. Dictating legal notes...' });
+        if (textarea) {
+          textarea.value = "Verify this rental contract notary stamp under Delhi Stamp Slabs.";
+          textarea.focus();
+        }
+      };
+    }
+
+    // Right drawer auditing action binds
+    const reverifyBtn = document.getElementById('btn-reverify');
+    if (reverifyBtn) {
+      reverifyBtn.onclick = () => {
+        if (this.activeEvidenceId) {
+          this.triggerDocumentVerification(this.activeEvidenceId);
+        } else {
+          VLUtils.showToast({ type: 'warning', title: 'No document active', message: 'Select or upload an evidence file first.' });
+        }
+      };
+    }
+
+    const flagFraudBtn = document.getElementById('btn-flag-fraud');
+    if (flagFraudBtn) {
+      flagFraudBtn.onclick = async () => {
+        if (this.activeEvidenceId) {
+          const res = await VLAPI.request(`/evidence/${this.activeEvidenceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ category: "FLAGGED FRAUD" })
+          });
+          VLUtils.showToast({ type: 'error', title: 'Document Flagged', message: 'This file has been reported as fraudulent.' });
+        }
+      };
+    }
+  },
+
+  async loadThreads(selectThreadId = null) {
+    const res = await VLAPI.request('/ai/chat/threads');
+    if (!res.success) return;
+    this.threads = res.data.threads;
+    
+    // Distribute threads into Today, Yesterday, and Previous Week
+    const todayList = document.getElementById('threads-today');
+    const yesterdayList = document.getElementById('threads-yesterday');
+    const prevweekList = document.getElementById('threads-prevweek');
+
+    if (!todayList || !yesterdayList || !prevweekList) return;
+
+    todayList.innerHTML = '';
+    yesterdayList.innerHTML = '';
+    prevweekList.innerHTML = '';
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfYesterday = new Date(startOfToday.getTime() - (24 * 60 * 60 * 1000));
+
+    let activeSet = false;
+
+    this.threads.forEach(t => {
+      // Set activeThreadId to either the selected thread or the first thread in the list
+      const isActive = selectThreadId ? (t.id === selectThreadId) : (this.activeThreadId ? t.id === this.activeThreadId : !activeSet);
+      if (isActive) {
+        this.activeThreadId = t.id;
+        activeSet = true;
+      }
+
+      const itemHtml = `
+        <div class="thread-item ${isActive ? 'active' : ''}" data-id="${t.id}">
+          <svg class="thread-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          <span class="thread-title">${t.title}</span>
+          <button class="delete-thread-btn" data-delete-id="${t.id}" title="Clear/Delete Thread">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      `;
+
+      const threadDate = new Date(t.updated_at);
+
+      if (threadDate >= startOfToday) {
+        todayList.insertAdjacentHTML('beforeend', itemHtml);
+      } else if (threadDate >= startOfYesterday) {
+        yesterdayList.insertAdjacentHTML('beforeend', itemHtml);
+      } else {
+        prevweekList.insertAdjacentHTML('beforeend', itemHtml);
+      }
+    });
+
+    // Handle empty sections gracefully
+    if (!todayList.innerHTML) todayList.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:4px 10px;">No threads today</div>';
+    if (!yesterdayList.innerHTML) yesterdayList.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:4px 10px;">No threads yesterday</div>';
+    if (!prevweekList.innerHTML) prevweekList.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.2);padding:4px 10px;">No older threads</div>';
+
+    // Bind click handlers to threads
+    document.querySelectorAll('.thread-item').forEach(el => {
+      el.onclick = (e) => {
+        if (e.target.closest('.delete-thread-btn')) {
+          const id = parseInt(e.target.closest('.delete-thread-btn').dataset.deleteId);
+          this.deleteThread(id);
+          return;
+        }
+        const id = parseInt(el.dataset.id);
+        this.switchThread(id);
+      };
+    });
+
+    const activeT = this.threads.find(t => t.id === this.activeThreadId);
+    if (activeT) {
+      document.getElementById('current-thread-title').textContent = activeT.title;
+    }
+
+    await this.loadChatHistory();
+    await this.loadWorkspaceFiles();
+  },
+
+  async deleteThread(id) {
+    if (confirm("Are you sure you want to clear/delete this conversation thread?")) {
+      const res = await VLAPI.request(`/ai/chat/threads/${id}`, { method: 'DELETE' });
+      if (res.success) {
+        VLUtils.showToast({ type: 'success', title: 'Deleted', message: 'Thread cleared successfully.' });
+        if (this.activeThreadId === id) {
+          this.activeThreadId = null;
+        }
+        await this.loadThreads();
+      }
+    }
+  },
+
+  async switchThread(id) {
+    this.activeThreadId = id;
+    document.querySelectorAll('.thread-item').forEach(el => {
+      el.classList.toggle('active', parseInt(el.dataset.id) === id);
+    });
+    const activeT = this.threads.find(t => t.id === id);
+    if (activeT) {
+      document.getElementById('current-thread-title').textContent = activeT.title;
+    }
+    await this.loadChatHistory();
+    await this.loadWorkspaceFiles();
+  },
+
+  async loadChatHistory() {
+    const stream = document.getElementById('chat-stream');
+    const welcome = document.getElementById('chat-welcome-screen');
+    if (!stream || !welcome) return;
+
+    stream.innerHTML = '<div class="text-secondary text-sm" style="text-align:center;padding:var(--space-md)">Synchronizing chat history…</div>';
+
+    const res = await VLAPI.request(`/ai/chat/history?complaint_id=${this.activeThreadId}`);
+    if (!res.success) {
+      stream.innerHTML = '';
+      welcome.classList.remove('hidden');
+      return;
+    }
+
+    // If there are no custom user/AI messages (length is 0 or 1 with system greeting), display the elegant welcome view
+    if (res.data.messages.length <= 1) {
+      stream.innerHTML = '';
+      stream.classList.add('hidden');
+      welcome.classList.remove('hidden');
+    } else {
+      welcome.classList.add('hidden');
+      stream.classList.remove('hidden');
+      stream.innerHTML = '';
+      res.data.messages.forEach(msg => {
+        // Skip default template system instructions if present
+        if (msg.content && msg.content.includes("verify_system_instruction")) return;
+        this.appendMessageBubble(msg.sender_id === VLAuth.getCurrentUser()?.user_id ? 'user' : 'ai', msg.content);
+      });
+      this.scrollToBottom();
+    }
+  },
+
+  appendMessageBubble(role, content) {
+    const stream = document.getElementById('chat-stream');
+    const welcome = document.getElementById('chat-welcome-screen');
+    if (!stream) return;
+
+    if (welcome) welcome.classList.add('hidden');
+    stream.classList.remove('hidden');
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message chat-message--${role}`;
+
+    // Add avatar container
+    const avatar = document.createElement('div');
+    avatar.className = role === 'user' ? 'user-avatar-premium' : 'user-avatar-premium ai-avatar-styled';
+    avatar.style.background = role === 'user' ? 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)' : '#1e293b';
+    avatar.innerHTML = role === 'user' ? (VLAuth.getCurrentUser()?.full_name?.charAt(0) || 'U') : '⚖';
+    avatar.style.width = '32px';
+    avatar.style.height = '32px';
+    avatar.style.borderRadius = '50%';
+    avatar.style.display = 'flex';
+    avatar.style.alignItems = 'center';
+    avatar.style.justifyContent = 'center';
+    avatar.style.fontSize = '12px';
+    avatar.style.fontWeight = '700';
+    avatar.style.color = '#fff';
+    avatar.style.flexShrink = '0';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.innerHTML = this.parseMarkdown(content);
+
+    msgDiv.appendChild(avatar);
+    msgDiv.appendChild(bubble);
+    stream.appendChild(msgDiv);
+  },
+
+  parseMarkdown(text) {
+    if (!text) return '';
+    let html = text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    // Headings
+    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+    // Bold & Italics
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    // Lists
+    html = html.replace(/^\s*-\s+(.*$)/gim, '<li>$1</li>');
+    html = html.replace(/^\s*\*\s+(.*$)/gim, '<li>$1</li>');
+
+    // Blockquotes
+    html = html.replace(/^\s*>\s+(.*$)/gim, '<blockquote style="border-left:3px solid #7c3aed;padding-left:10px;margin-bottom:10px;color:rgba(255,255,255,0.7)">$1</blockquote>');
+
+    // Tables parsing
+    const lines = html.split('\n');
+    let inTable = false;
+    let tableHtml = '';
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+        const cells = lines[i].split('|').map(c => c.trim()).filter((c, idx, arr) => idx > 0 && idx < arr.length - 1);
+        if (!inTable) {
+          inTable = true;
+          tableHtml += '<div class="table-container" style="overflow-x:auto;margin:10px 0;"><table class="premium-table" style="width:100%;border-collapse:collapse;font-size:12.5px;"><thead><tr style="background:rgba(255,255,255,0.05);border-bottom:1.5px solid rgba(255,255,255,0.1);">';
+          cells.forEach(c => tableHtml += `<th style="padding:8px 12px;text-align:left;font-weight:700;color:#c084fc;">${c}</th>`);
+          tableHtml += '</tr></thead><tbody>';
+        } else {
+          if (cells.every(c => /^:-*:$/.test(c) || /^--*$/.test(c))) {
+            continue;
+          }
+          tableHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">';
+          cells.forEach(c => tableHtml += `<td style="padding:8px 12px;color:rgba(255,255,255,0.85);">${c}</td>`);
+          tableHtml += '</tr>';
+        }
+        lines[i] = '';
+      } else {
+        if (inTable) {
+          inTable = false;
+          tableHtml += '</tbody></table></div>';
+          lines[i] = tableHtml + '\n' + lines[i];
+          tableHtml = '';
+        }
+      }
+    }
+    html = lines.filter(l => l !== '').join('\n');
+
+    // Paragraph splits
+    return html.split('\n\n').map(p => {
+      const trimmed = p.trim();
+      if (trimmed.startsWith('<h') || trimmed.startsWith('<li') || trimmed.startsWith('<blockquote') || trimmed.startsWith('<div')) return p;
+      return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+    }).join('');
+  },
+
+  scrollToBottom() {
+    const stream = document.getElementById('chat-stream');
+    if (stream) stream.scrollTop = stream.scrollHeight;
+  },
+
+  showTypingIndicator() {
+    const stream = document.getElementById('chat-stream');
+    if (!stream) return;
+
+    const ind = document.createElement('div');
+    ind.className = 'chat-message chat-message--ai typing-indicator-container';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'user-avatar-premium ai-avatar-styled';
+    avatar.style.background = '#1e293b';
+    avatar.innerHTML = '⚖';
+    avatar.style.width = '32px';
+    avatar.style.height = '32px';
+    avatar.style.borderRadius = '50%';
+    avatar.style.display = 'flex';
+    avatar.style.alignItems = 'center';
+    avatar.style.justifyContent = 'center';
+    avatar.style.fontSize = '12px';
+    avatar.style.color = '#fff';
+    avatar.style.flexShrink = '0';
+
+    ind.innerHTML = `
+      <div class="chat-bubble" style="display:flex;gap:4px;align-items:center;padding:12px 18px;">
+        <div class="typing-dot" style="width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:typeBounce 1.4s infinite ease-in-out;"></div>
+        <div class="typing-dot" style="width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:typeBounce 1.4s infinite ease-in-out 0.2s;"></div>
+        <div class="typing-dot" style="width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:typeBounce 1.4s infinite ease-in-out 0.4s;"></div>
+      </div>
+    `;
+    ind.prepend(avatar);
+    stream.appendChild(ind);
+    this.scrollToBottom();
+
+    // Style for typing bouncy dots
+    if (!document.getElementById('typing-style-override')) {
+      const s = document.createElement('style');
+      s.id = 'typing-style-override';
+      s.innerHTML = `
+        @keyframes typeBounce {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          45% { transform: scale(1.2); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(s);
+    }
+  },
+
+  removeTypingIndicator() {
+    const ind = document.querySelector('.typing-indicator-container');
+    if (ind) ind.remove();
+  },
+
+  async sendMessage(text) {
+    this.appendMessageBubble('user', text);
+    this.scrollToBottom();
+    this.showTypingIndicator();
+
+    const res = await VLAPI.request('/ai/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        message: text,
+        complaint_id: this.activeThreadId
+      })
+    });
+
+    this.removeTypingIndicator();
+    if (res.success) {
+      this.appendMessageBubble('ai', res.data.content);
+    } else {
+      this.appendMessageBubble('ai', `Sorry, I encountered an error: ${res.message}`);
+    }
+    this.scrollToBottom();
+  },
+
+  initUpload() {
+    const trigger = document.getElementById('chat-upload-btn');
+    const input = document.getElementById('chat-file-input');
+    if (!trigger || !input) return;
+
+    trigger.onclick = () => input.click();
+    input.onchange = async () => {
+      if (!input.files.length) return;
+      const file = input.files[0];
+      
+      this.appendMessageBubble('user', `Uploaded document: **${file.name}** (${(file.size/1024).toFixed(1)} KB)`);
+      this.scrollToBottom();
+      
+      // Render premium step-by-step visual workflow inside chat bubble
+      const stream = document.getElementById('chat-stream');
+      const stepsDiv = document.createElement('div');
+      stepsDiv.className = 'chat-message chat-message--ai upload-pipeline-stream-block';
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'user-avatar-premium ai-avatar-styled';
+      avatar.style.background = '#1e293b';
+      avatar.innerHTML = '⚖';
+      avatar.style.width = '32px';
+      avatar.style.height = '32px';
+      avatar.style.borderRadius = '50%';
+      avatar.style.display = 'flex';
+      avatar.style.alignItems = 'center';
+      avatar.style.justifyContent = 'center';
+      avatar.style.fontSize = '12px';
+      avatar.style.color = '#fff';
+      avatar.style.flexShrink = '0';
+
+      stepsDiv.innerHTML = `
+        <div class="chat-bubble" style="width:100%; max-width:360px;">
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:12px;color:#c084fc;">Evidence Audit Pipeline</h4>
+          <div class="analysis-steps-stream">
+            <div class="step-item active" id="p-step-0"><span class="step-bullet"></span>Receiving document...</div>
+            <div class="step-item" id="p-step-1"><span class="step-bullet"></span>Extracting OCR...</div>
+            <div class="step-item" id="p-step-2"><span class="step-bullet"></span>Running fraud detection...</div>
+            <div class="step-item" id="p-step-3"><span class="step-bullet"></span>Searching legal database...</div>
+            <div class="step-item" id="p-step-4"><span class="step-bullet"></span>Generating legal opinion...</div>
+            <div class="step-item" id="p-step-5"><span class="step-bullet"></span>Done.</div>
+          </div>
+        </div>
+      `;
+      stepsDiv.prepend(avatar);
+      stream.appendChild(stepsDiv);
+      this.scrollToBottom();
+
+      // Trigger multi-step visual sequence delays
+      const updateStep = (id, state) => {
+        const el = document.getElementById(`p-step-${id}`);
+        if (!el) return;
+        if (state === 'active') {
+          el.classList.add('active');
+        } else if (state === 'completed') {
+          el.classList.remove('active');
+          el.classList.add('completed');
+        }
+      };
+
+      const runVisualPipeline = () => {
+        return new Promise((resolve) => {
+          setTimeout(() => { updateStep(0, 'completed'); updateStep(1, 'active'); }, 500);
+          setTimeout(() => { updateStep(1, 'completed'); updateStep(2, 'active'); }, 1100);
+          setTimeout(() => { updateStep(2, 'completed'); updateStep(3, 'active'); }, 1800);
+          setTimeout(() => { updateStep(3, 'completed'); updateStep(4, 'active'); }, 2400);
+          setTimeout(() => { updateStep(4, 'completed'); updateStep(5, 'active'); }, 3000);
+          setTimeout(() => { updateStep(5, 'completed'); resolve(); }, 3500);
+        });
+      };
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('complaint_id', this.activeThreadId);
+
+      // Fire actual API and steps concurrently
+      const [apiResponse] = await Promise.all([
+        fetch('/api/v1/ai/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${VLUtils.storageGet(SESSION_KEY)}`
+          },
+          body: formData
+        }).then(r => r.json().catch(() => null)),
+        runVisualPipeline()
+      ]);
+
+      // Remove pipeline placeholder
+      stepsDiv.remove();
+
+      if (apiResponse && apiResponse.success) {
+        VLUtils.showToast({ type: 'success', title: 'File Extracted', message: file.name });
+        await this.loadWorkspaceFiles();
+        await this.selectDocument(apiResponse.data.evidence_id);
+        
+        // Auto-run verification response after upload
+        await this.triggerDocumentVerification(apiResponse.data.evidence_id);
+      } else {
+        this.appendMessageBubble('ai', `Failed to upload and verify file: ${apiResponse?.message || 'Server error'}`);
+        this.scrollToBottom();
+      }
+    };
+  },
+
+  async loadWorkspaceFiles() {
+    const listEl = document.getElementById('workspace-files-list');
+    if (!listEl) return;
+
+    const res = await VLAPI.request(`/evidence/${this.activeThreadId}`);
+    if (!res.success || !res.data || !res.data.length) {
+      listEl.innerHTML = '<p class="empty-files-text" style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:15px 0;">No files uploaded in this thread yet. Drag &amp; drop a file or click the attachment icon to upload.</p>';
+      document.getElementById('document-analysis-section').classList.add('hidden');
+      return;
+    }
+
+    listEl.innerHTML = res.data.map(f => {
+      const isSelected = this.activeEvidenceId === f.evidence_id;
+      return `
+        <div class="workspace-file-item ${isSelected ? 'selected' : ''}" data-file-id="${f.evidence_id}">
+          <div class="file-info-block">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <div>
+              <div class="file-info-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;">${f.original_name}</div>
+              <div class="file-info-meta">${f.file_type} · ${(f.file_size/1024).toFixed(1)} KB</div>
+            </div>
+          </div>
+          <button class="btn-logout-sidebar delete-file-btn" data-del-file-id="${f.evidence_id}" title="Delete file" style="padding:4px;color:rgba(255,255,255,0.3)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    listEl.querySelectorAll('.workspace-file-item').forEach(el => {
+      el.onclick = (e) => {
+        if (e.target.closest('.delete-file-btn')) {
+          const id = parseInt(e.target.closest('.delete-file-btn').dataset.delFileId);
+          this.deleteFile(id);
+          return;
+        }
+        const id = parseInt(el.dataset.fileId);
+        this.selectDocument(id);
+      };
+    });
+  },
+
+  async deleteFile(id) {
+    if (confirm("Are you sure you want to delete this document from the workspace?")) {
+      const res = await VLAPI.request(`/evidence/${id}`, { method: 'DELETE' });
+      if (res.success) {
+        VLUtils.showToast({ type: 'success', title: 'Deleted', message: 'Document removed successfully.' });
+        if (this.activeEvidenceId === id) this.activeEvidenceId = null;
+        await this.loadWorkspaceFiles();
+      }
+    }
+  },
+
+  async selectDocument(id) {
+    this.activeEvidenceId = id;
+    document.querySelectorAll('.workspace-file-item').forEach(el => {
+      el.classList.toggle('selected', parseInt(el.dataset.fileId) === id);
+    });
+
+    const res = await VLAPI.request(`/ai/document/${id}`);
+    if (!res.success) return;
+
+    const data = res.data;
+    document.getElementById('analysis-doc-type').textContent = data.analysis.document_type;
+    document.getElementById('analysis-status').textContent = data.analysis.status;
+    
+    const prob = data.analysis.fraud_probability;
+    const probEl = document.getElementById('analysis-fraud-prob');
+    probEl.textContent = `${prob}%`;
+    
+    const fillBar = document.getElementById('risk-bar-fill');
+    fillBar.style.width = `${prob}%`;
+    fillBar.className = 'risk-bar-fill';
+    if (prob > 75) {
+      fillBar.classList.add('risk-bar-fill--high');
+      probEl.style.color = '#ef4444';
+    } else if (prob > 35) {
+      fillBar.classList.add('risk-bar-fill--med');
+      probEl.style.color = '#f59e0b';
+    } else {
+      fillBar.classList.add('risk-bar-fill--low');
+      probEl.style.color = '#10b981';
+    }
+
+    document.getElementById('analysis-confidence').textContent = data.analysis.confidence_score;
+    document.getElementById('analysis-date').textContent = new Date(data.upload_time).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    document.getElementById('analysis-ocr-content').textContent = data.ocr_text;
+
+    document.getElementById('document-analysis-section').classList.remove('hidden');
+    
+    const panel = document.getElementById('chat-detail-panel');
+    if (panel) panel.classList.remove('closed');
+  },
+
+  async triggerDocumentVerification(id) {
+    this.showTypingIndicator();
+    this.appendMessageBubble('ai', "Initiating secure digital notary and signature authenticity audit. Searching Bharatiya Nyaya Sanhita (BNS) indices...");
+    this.scrollToBottom();
+
+    const res = await VLAPI.request('/ai/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        evidence_id: id,
+        complaint_id: this.activeThreadId
+      })
+    });
+
+    this.removeTypingIndicator();
+    if (res.success) {
+      this.appendMessageBubble('ai', res.data.content);
+    } else {
+      this.appendMessageBubble('ai', `Analysis failed: ${res.message}`);
+    }
+    this.scrollToBottom();
+  }
+};
+window.VLChat = VLChat;
+
 
 /* =======================================================
 EVENT LISTENERS & INITIALIZATION
@@ -529,7 +1230,7 @@ async function initializeApp() {
     VLAuth.redirectIfAuthenticated();
     initRegisterForm();
   } else if (page === 'dashboard.html') {
-    await VLDashboard.initDashboard();
+    await VLChat.initChat();
   } else if (page === 'index.html') {
     VLDashboard.initAccordions();
   }

@@ -161,6 +161,98 @@
           <!-- Populated by JavaScript -->
         </div>
 
+        <!-- My Documents Workspace View -->
+        <div class="workspace-view-container hidden" id="view-my-documents">
+          <div class="workspace-header">
+            <h2>📁 My Documents</h2>
+            <p>View and manage all generated legal documents and complaints.</p>
+          </div>
+          <div class="workspace-content" id="documents-list-container">
+            <div class="loading-spinner">Loading documents...</div>
+          </div>
+        </div>
+
+        <!-- Fraud Alerts Workspace View -->
+        <div class="workspace-view-container hidden" id="view-fraud-alerts">
+          <div class="workspace-header">
+            <h2>🛡️ Fraud Alerts & Document Audits</h2>
+            <p>Real-time fraud audit results, stamp verification, and anomaly detection.</p>
+          </div>
+          <div class="workspace-content" id="fraud-alerts-container">
+            <div class="loading-spinner">Loading fraud alerts...</div>
+          </div>
+        </div>
+
+        <!-- Complaint History Workspace View -->
+        <div class="workspace-view-container hidden" id="view-complaint-history">
+          <div class="workspace-header">
+            <h2>📋 Complaint History</h2>
+            <p>Track your filed complaints, status workflows, and assigned departments.</p>
+          </div>
+          <div class="workspace-content" id="complaint-history-container">
+            <div class="loading-spinner">Loading complaint history...</div>
+          </div>
+        </div>
+
+        <!-- Legal Search Workspace View -->
+        <div class="workspace-view-container hidden" id="view-legal-search">
+          <div class="workspace-header">
+            <h2>🔍 Legal & Reference Search</h2>
+            <p>Search categories, government departments, helplines, and legal authorities.</p>
+          </div>
+          <div class="legal-search-box">
+            <input type="text" id="legal-search-input" class="premium-textarea" placeholder="Search categories, departments, or keywords (e.g. Consumer, Labour, Cyber)..." style="margin-bottom: 16px;">
+          </div>
+          <div class="workspace-content" id="legal-search-container">
+            <div class="loading-spinner">Loading legal index...</div>
+          </div>
+        </div>
+
+        <!-- Settings Workspace View -->
+        <div class="workspace-view-container hidden" id="view-settings">
+          <div class="workspace-header">
+            <h2>⚙️ Account & Settings</h2>
+            <p>Manage profile information, preferences, and account security.</p>
+          </div>
+          <div class="workspace-content" id="settings-container">
+            <!-- Profile Form -->
+            <div class="settings-card">
+              <h3>Profile Information</h3>
+              <form id="settings-profile-form" style="margin-top:12px;">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="settings-name" class="premium-textarea" required>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                  <label>Mobile Number</label>
+                  <input type="text" id="settings-mobile" class="premium-textarea" required>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                  <label>Email Address (read-only)</label>
+                  <input type="email" id="settings-email" class="premium-textarea" disabled style="opacity:0.6;">
+                </div>
+                <button type="submit" class="btn btn--primary btn--sm" style="margin-top:16px;" id="save-profile-btn">Save Profile</button>
+              </form>
+            </div>
+
+            <!-- Password Form -->
+            <div class="settings-card" style="margin-top:24px;">
+              <h3>Change Password</h3>
+              <form id="settings-password-form" style="margin-top:12px;">
+                <div class="form-group">
+                  <label>Current Password</label>
+                  <input type="password" id="settings-curr-pass" class="premium-textarea" required>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                  <label>New Password (min 8 chars)</label>
+                  <input type="password" id="settings-new-pass" class="premium-textarea" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--sm" style="margin-top:16px;" id="change-pass-btn">Update Password</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
         <!-- Welcome View Placeholder (shown when stream is empty) -->
         <div class="chat-welcome-container hidden" id="chat-welcome-screen">
           <div class="welcome-hero-brand">
@@ -402,7 +494,7 @@
     </div>
     <div class="modal__footer">
       <button class="btn btn--text" data-modal-close>Close</button>
-      <button class="btn btn--primary btn--sm" onclick="window.VLUtils.showToast({type:'success',title:'Done',message:'All notifications marked as read.'})">Mark all read</button>
+      <button class="btn btn--primary btn--sm" onclick="fetch('/api/v1/notifications/read-all', {method:'PUT', headers:{'Authorization': 'Bearer ' + (localStorage.getItem('vl_token')||'')}}).then(res => res.json()).then(data => { if(data.success) { window.VLUtils.showToast({type:'success',title:'Done',message:'All notifications marked as read.'}); if(typeof loadNotifications === 'function') loadNotifications(); } })">Mark all read</button>
     </div>
   </div>
 </div>

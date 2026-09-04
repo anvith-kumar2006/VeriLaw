@@ -582,37 +582,14 @@ const VLChat = {
       };
     });
 
-    // Navigation button binds - keep single-page chat paradigm intact
+    // Navigation button binds & workspace view switching
     const navItems = {
-      'nav-chat-assistant': () => {
-        if (textarea) { textarea.focus(); }
-        VLUtils.showToast({ type: 'info', title: 'VeriLaw Assistant', message: 'Ready to receive legal directives.' });
-      },
-      'nav-my-documents': () => {
-        if (detailPanel) { detailPanel.classList.remove('closed'); }
-        VLUtils.showToast({ type: 'info', title: 'Evidence Drawer', message: 'Workspace documents listed on the right.' });
-      },
-      'nav-fraud-alerts': () => {
-        if (textarea) {
-          textarea.value = "Audit my workspace documents for fraudulent clauses or registration inconsistencies. Search relevant IPC / BNS.";
-          textarea.style.height = 'auto';
-          textarea.style.height = (textarea.scrollHeight) + 'px';
-          textarea.focus();
-        }
-      },
-      'nav-complaint-history': () => {
-        VLUtils.showToast({ type: 'info', title: 'Threads', message: 'Browse past legal complaints in your recent chats.' });
-      },
-      'nav-legal-search': () => {
-        if (textarea) {
-          textarea.value = "Search Indian law reference database for section... (Replace with desired section, e.g. Section 17 of Registration Act)";
-          textarea.focus();
-        }
-      },
-      'nav-settings': () => {
-        VLApp.toggleTheme();
-        VLUtils.showToast({ type: 'success', title: 'Theme Toggled', message: 'Sleek visual appearance switched.' });
-      }
+      'nav-chat-assistant': () => this.switchWorkspace('ai-assistant', 'General Legal Assistant'),
+      'nav-my-documents': () => this.switchWorkspace('my-documents', 'My Documents'),
+      'nav-fraud-alerts': () => this.switchWorkspace('fraud-alerts', 'Fraud Alerts & Document Audits'),
+      'nav-complaint-history': () => this.switchWorkspace('complaint-history', 'Complaint History'),
+      'nav-legal-search': () => this.switchWorkspace('legal-search', 'Legal & Reference Search'),
+      'nav-settings': () => this.switchWorkspace('settings', 'Account & Settings')
     };
 
     Object.entries(navItems).forEach(([id, handler]) => {
@@ -1204,9 +1181,365 @@ const VLChat = {
       this.appendMessageBubble('ai', `Analysis failed: ${res.message}`);
     }
     this.scrollToBottom();
+  },
+
+  /* ──────────────────────────────────────────────────────────
+     WORKSPACE SWITCHING & VIEW RENDERERS
+  ────────────────────────────────────────────────────────── */
+  activeWorkspaceMode: 'ai-assistant',
+
+  switchWorkspace(mode, headingTitle) {
+    this.activeWorkspaceMode = mode;
+    
+    // Update Header Title
+    const titleEl = document.getElementById('current-thread-title');
+    if (titleEl) titleEl.textContent = headingTitle || 'VeriLaw Workspace';
+
+    // Hide chat stream & chat input footer if not in AI Assistant mode
+    const chatStream = document.getElementById('chat-stream');
+    const welcomeScreen = document.getElementById('chat-welcome-screen');
+    const inputFooter = document.querySelector('.chat-input-sticky-footer');
+
+    // Hide all workspace views
+    document.querySelectorAll('.workspace-view-container').forEach(v => v.classList.add('hidden'));
+
+    if (mode === 'ai-assistant') {
+      if (chatStream) chatStream.classList.remove('hidden');
+      if (inputFooter) inputFooter.classList.remove('hidden');
+      if (welcomeScreen && chatStream && chatStream.children.length === 0) {
+        welcomeScreen.classList.remove('hidden');
+      }
+    } else {
+      if (chatStream) chatStream.classList.add('hidden');
+      if (welcomeScreen) welcomeScreen.classList.add('hidden');
+      if (inputFooter) inputFooter.classList.add('hidden');
+
+      const viewEl = document.getElementById(`view-${mode}`);
+      if (viewEl) {
+        viewEl.classList.remove('hidden');
+      }
+
+      // Load specific workspace view data
+      if (mode === 'my-documents') this.loadMyDocumentsWorkspace();
+      else if (mode === 'fraud-alerts') this.loadFraudAlertsWorkspace();
+      else if (mode === 'complaint-history') this.loadComplaintHistoryWorkspace();
+      else if (mode === 'legal-search') this.loadLegalSearchWorkspace();
+      else if (mode === 'settings') this.loadSettingsWorkspace();
+    }
+  },
+
+  /* 1. My Documents Workspace */
+  async loadMyDocumentsWorkspace() {
+    const container = document.getElementById('documents-list-container');
+    if (!container) return;
+    container.innerHTML = '<div class="loading-spinner">Loading generated documents...</div>';
+
+    const res = await VLAPI.request('/documents');
+    if (!res.success) {
+      container.innerHTML = `<div class="error-workspace-state">Failed to load documents: ${VLUtils.escapeHtml(res.message)}</div>`;
+      return;
+    }
+
+    const docs = res.data || [];
+    if (docs.length === 0) {
+      container.innerHTML = `
+        <div class="empty-workspace-state">
+          <h3>No Generated Documents</h3>
+          <p>You have not generated any complaint documents yet. File a complaint or ask the AI Assistant to generate one.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = docs.map(doc => `
+      <div class="workspace-card" id="doc-card-${doc.document_id}">
+        <div class="card-title-row">
+          <h3>📄 Document #${doc.document_id} (${doc.document_type})</h3>
+          <span class="badge badge--primary">${doc.document_type}</span>
+        </div>
+        <div class="card-meta-row">
+          <span>Complaint ID: ${doc.complaint_id}</span>
+          <span>Generated: ${doc.generated_at ? new Date(doc.generated_at).toLocaleString('en-IN') : 'N/A'}</span>
+        </div>
+        <div class="card-actions-row">
+          <a href="/api/v1/documents/download/${doc.document_id}" target="_blank" class="btn btn--primary btn--sm" style="display:inline-flex;align-items:center;gap:4px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Download ${doc.document_type}
+          </a>
+          <button class="btn btn--danger btn--sm btn-delete-doc" data-doc-id="${doc.document_id}">Delete</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.btn-delete-doc').forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.docId;
+        if (confirm(`Delete document #${id}?`)) {
+          const delRes = await VLAPI.request(`/documents/${id}`, { method: 'DELETE' });
+          if (delRes.success) {
+            VLUtils.showToast({ type: 'success', title: 'Deleted', message: 'Document removed.' });
+            this.loadMyDocumentsWorkspace();
+          } else {
+            VLUtils.showToast({ type: 'error', title: 'Error', message: delRes.message });
+          }
+        }
+      };
+    });
+  },
+
+  /* 2. Fraud Alerts Workspace */
+  async loadFraudAlertsWorkspace() {
+    const container = document.getElementById('fraud-alerts-container');
+    if (!container) return;
+    container.innerHTML = '<div class="loading-spinner">Loading evidence and fraud audits...</div>';
+
+    // Fetch complaints first to list evidence
+    const complaintsRes = await VLAPI.request('/complaints');
+    if (!complaintsRes.success) {
+      container.innerHTML = `<div class="error-workspace-state">Failed to load complaints: ${VLUtils.escapeHtml(complaintsRes.message)}</div>`;
+      return;
+    }
+
+    const complaints = complaintsRes.data?.data || complaintsRes.data || [];
+    let allEvidence = [];
+
+    for (const c of complaints) {
+      const evRes = await VLAPI.request(`/evidence/${c.complaint_id}`);
+      if (evRes.success && Array.isArray(evRes.data)) {
+        allEvidence.push(...evRes.data);
+      }
+    }
+
+    if (allEvidence.length === 0) {
+      container.innerHTML = `
+        <div class="empty-workspace-state">
+          <h3>No Documents Uploaded for Fraud Auditing</h3>
+          <p>Upload property deeds, agreements, or bills in the AI chat to trigger automated fraud audit reports.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = allEvidence.map(ev => `
+      <div class="workspace-card" id="fraud-card-${ev.evidence_id}">
+        <div class="card-title-row">
+          <h3>📑 ${VLUtils.escapeHtml(ev.original_name || ev.file_name)}</h3>
+          <span class="badge ${ev.category === 'Property Dispute' ? 'badge--warning' : 'badge--info'}">${ev.category || 'General'}</span>
+        </div>
+        <div class="card-meta-row">
+          <span>Type: ${ev.file_type || 'File'}</span>
+          <span>Size: ${ev.file_size ? (ev.file_size / 1024).toFixed(1) + ' KB' : 'N/A'}</span>
+          <span>Uploaded: ${ev.upload_time ? new Date(ev.upload_time).toLocaleDateString('en-IN') : 'N/A'}</span>
+        </div>
+        <div style="margin-bottom:12px;font-size:0.85rem;color:var(--color-text-secondary);background:rgba(0,0,0,0.2);padding:8px 12px;border-radius:8px;max-height:80px;overflow:hidden;">
+          ${VLUtils.escapeHtml((ev.ocr_text || 'No extracted text.').substring(0, 200))}...
+        </div>
+        <div class="card-actions-row">
+          <button class="btn btn--primary btn--sm btn-inspect-audit" data-ev-id="${ev.evidence_id}">Inspect Audit Report</button>
+          <a href="/api/v1/evidence/download/${ev.evidence_id}" target="_blank" class="btn btn--outline btn--sm">Download Original</a>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.btn-inspect-audit').forEach(btn => {
+      btn.onclick = () => {
+        const id = parseInt(btn.dataset.evId);
+        this.selectDocument(id);
+      };
+    });
+  },
+
+  /* 3. Complaint History Workspace */
+  async loadComplaintHistoryWorkspace() {
+    const container = document.getElementById('complaint-history-container');
+    if (!container) return;
+    container.innerHTML = '<div class="loading-spinner">Loading complaint records...</div>';
+
+    const res = await VLAPI.request('/complaints');
+    if (!res.success) {
+      container.innerHTML = `<div class="error-workspace-state">Failed to load complaints: ${VLUtils.escapeHtml(res.message)}</div>`;
+      return;
+    }
+
+    const complaints = res.data?.data || res.data || [];
+    if (complaints.length === 0) {
+      container.innerHTML = `
+        <div class="empty-workspace-state">
+          <h3>No Complaints Filed</h3>
+          <p>You have not filed any legal complaints yet. Use the AI Assistant to classify and file a complaint.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = complaints.map(c => `
+      <div class="workspace-card" id="complaint-card-${c.complaint_id}">
+        <div class="card-title-row">
+          <h3>⚖️ ${VLUtils.escapeHtml(c.title)}</h3>
+          <span class="badge ${c.status === 'Completed' ? 'badge--success' : 'badge--warning'}">${c.status}</span>
+        </div>
+        <div class="card-meta-row">
+          <span>Complaint ID: ${c.complaint_id}</span>
+          <span>State: ${VLUtils.escapeHtml(c.state || 'N/A')}, ${VLUtils.escapeHtml(c.district || 'N/A')}</span>
+          <span>Confidence: ${c.ai_confidence ? c.ai_confidence + '%' : 'N/A'}</span>
+          <span>Filed: ${c.created_at ? new Date(c.created_at).toLocaleDateString('en-IN') : 'N/A'}</span>
+        </div>
+        <p style="font-size:0.9rem;margin-bottom:12px;color:var(--color-text-secondary);">${VLUtils.escapeHtml(c.description.substring(0, 250))}${c.description.length > 250 ? '...' : ''}</p>
+        <div class="card-actions-row">
+          <button class="btn btn--outline btn--sm btn-view-complaint-details" data-comp-id="${c.complaint_id}">View Details</button>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.btn-view-complaint-details').forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.compId;
+        const compRes = await VLAPI.request(`/complaints/${id}`);
+        if (compRes.success) {
+          const detail = compRes.data;
+          alert(`Complaint #${detail.complaint_id}\nTitle: ${detail.title}\nCategory: ${detail.category?.category_name || 'N/A'}\nDepartment: ${detail.department?.department_name || 'N/A'}\nStatus: ${detail.status}\nDescription:\n${detail.description}`);
+        } else {
+          VLUtils.showToast({ type: 'error', title: 'Error', message: compRes.message });
+        }
+      };
+    });
+  },
+
+  /* 4. Legal Search Workspace */
+  async loadLegalSearchWorkspace() {
+    const container = document.getElementById('legal-search-container');
+    const input = document.getElementById('legal-search-input');
+    if (!container) return;
+    container.innerHTML = '<div class="loading-spinner">Loading legal reference index...</div>';
+
+    const [catRes, deptRes] = await Promise.all([
+      VLAPI.request('/categories'),
+      VLAPI.request('/departments')
+    ]);
+
+    const categories = catRes.success ? (catRes.data || []) : [];
+    const departments = deptRes.success ? (deptRes.data || []) : [];
+
+    const renderResults = (query = '') => {
+      const q = query.toLowerCase().trim();
+      const filteredCats = categories.filter(c => c.category_name.toLowerCase().includes(q) || (c.description && c.description.toLowerCase().includes(q)));
+      const filteredDepts = departments.filter(d => d.department_name.toLowerCase().includes(q) || (d.description && d.description.toLowerCase().includes(q)));
+
+      if (filteredCats.length === 0 && filteredDepts.length === 0) {
+        container.innerHTML = `
+          <div class="empty-workspace-state">
+            <h3>No Results Found</h3>
+            <p>No legal categories or government departments matched your query "${VLUtils.escapeHtml(query)}".</p>
+          </div>`;
+        return;
+      }
+
+      let html = '';
+      if (filteredCats.length > 0) {
+        html += `<h3 style="margin-bottom:12px;font-size:1.1rem;color:var(--color-primary);">Legal Complaint Categories (${filteredCats.length})</h3>`;
+        html += filteredCats.map(c => `
+          <div class="workspace-card" style="margin-bottom:12px;">
+            <div class="card-title-row">
+              <h3>Category: ${VLUtils.escapeHtml(c.category_name)}</h3>
+            </div>
+            <p style="font-size:0.9rem;color:var(--color-text-secondary);margin:0;">${VLUtils.escapeHtml(c.description || 'No description available.')}</p>
+          </div>
+        `).join('');
+      }
+
+      if (filteredDepts.length > 0) {
+        html += `<h3 style="margin-top:20px;margin-bottom:12px;font-size:1.1rem;color:var(--color-primary);">Government Departments & Authorities (${filteredDepts.length})</h3>`;
+        html += filteredDepts.map(d => `
+          <div class="workspace-card" style="margin-bottom:12px;">
+            <div class="card-title-row">
+              <h3>${VLUtils.escapeHtml(d.department_name)}</h3>
+              ${d.helpline ? `<span class="badge badge--success">📞 ${d.helpline}</span>` : ''}
+            </div>
+            <p style="font-size:0.9rem;color:var(--color-text-secondary);margin-bottom:8px;">${VLUtils.escapeHtml(d.description || 'Department reference.')}</p>
+            <div class="card-meta-row">
+              ${d.website ? `<span>Website: <a href="${d.website}" target="_blank" style="color:var(--color-primary);">${d.website}</a></span>` : ''}
+              ${d.email ? `<span>Email: ${d.email}</span>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      container.innerHTML = html;
+    };
+
+    renderResults('');
+
+    if (input) {
+      input.oninput = VLUtils.debounce(() => renderResults(input.value), 300);
+    }
+  },
+
+  /* 5. Settings Workspace */
+  async loadSettingsWorkspace() {
+    const user = VLAuth.getCurrentUser() || {};
+    const profileRes = await VLAPI.request('/profile');
+    const profileData = profileRes.success ? profileRes.data : user;
+
+    const nameInput = document.getElementById('settings-name');
+    const mobileInput = document.getElementById('settings-mobile');
+    const emailInput = document.getElementById('settings-email');
+
+    if (nameInput) nameInput.value = profileData.full_name || '';
+    if (mobileInput) mobileInput.value = profileData.mobile || '';
+    if (emailInput) emailInput.value = profileData.email || '';
+
+    // Bind profile form submit
+    const profileForm = document.getElementById('settings-profile-form');
+    if (profileForm) {
+      profileForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('save-profile-btn');
+        VLHelpers.setButtonLoading(btn, true, 'Saving...');
+        const res = await VLAPI.request('/profile', {
+          method: 'PUT',
+          body: JSON.stringify({
+            full_name: nameInput.value,
+            mobile: mobileInput.value
+          })
+        });
+        VLHelpers.setButtonLoading(btn, false, 'Save Profile');
+        if (res.success) {
+          VLUtils.showToast({ type: 'success', title: 'Success', message: 'Profile updated.' });
+          // Update local session
+          const updatedUser = { ...profileData, full_name: nameInput.value, mobile: mobileInput.value };
+          VLUtils.storageSet(USER_KEY, updatedUser);
+          VLDashboard.populateUserInfo();
+        } else {
+          VLUtils.showToast({ type: 'error', title: 'Error', message: res.message });
+        }
+      };
+    }
+
+    // Bind password form submit
+    const passForm = document.getElementById('settings-password-form');
+    if (passForm) {
+      passForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const currPass = document.getElementById('settings-curr-pass').value;
+        const newPass = document.getElementById('settings-new-pass').value;
+        const btn = document.getElementById('change-pass-btn');
+
+        VLHelpers.setButtonLoading(btn, true, 'Updating...');
+        const res = await VLAPI.request('/profile/password', {
+          method: 'PUT',
+          body: JSON.stringify({
+            current_password: currPass,
+            new_password: newPass
+          })
+        });
+        VLHelpers.setButtonLoading(btn, false, 'Update Password');
+        if (res.success) {
+          VLUtils.showToast({ type: 'success', title: 'Success', message: 'Password changed successfully.' });
+          passForm.reset();
+        } else {
+          VLUtils.showToast({ type: 'error', title: 'Error', message: res.message });
+        }
+      };
+    }
   }
-};
-window.VLChat = VLChat;
+
 
 
 /* =======================================================

@@ -4,13 +4,8 @@
   "description": "VeriLaw Static Frontend Preview",
   "type": "module",
   "scripts": {
-    "start": "python3 backend/app.py",
+    "start": "python backend/app.py",
     "build": "echo 'Static build complete'"
   },
-  "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.3",
-    "multer": "^2.2.0"
-  }
+  "dependencies": {}
 }

@@ -5458,14 +5458,6 @@ html {
   }
 }
 
-@media (max-width: 768px) {
-  .premium-sidebar {
-    position: absolute;
-    left: -280px;
-    top: 0;
-    height: 100%;
-  }
-  
   .premium-sidebar.mobile-open {
     left: 0;
   }
@@ -5475,5 +5467,103 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/* Workspace Views Styling */
+.workspace-view-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: var(--space-xl) 8%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  color: var(--color-text);
+}
+
+.workspace-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.workspace-header p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.workspace-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.workspace-card, .settings-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+[data-theme="dark"] .workspace-card, [data-theme="dark"] .settings-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.workspace-card:hover {
+  border-color: var(--color-primary);
+}
+
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+}
+
+.card-title-row h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card-meta-row {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.825rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.card-actions-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.loading-spinner, .empty-workspace-state {
+  text-align: center;
+  padding: var(--space-xxl) var(--space-md);
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.empty-workspace-state h3 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+}
+
+.error-workspace-state {
+  text-align: center;
+  padding: var(--space-xl);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  color: #ef4444;
+}
+
+.hidden {
+  display: none !important;
+}
+
 
 

@@ -175,8 +175,8 @@
         <!-- Fraud Alerts Workspace View -->
         <div class="workspace-view-container hidden" id="view-fraud-alerts">
           <div class="workspace-header">
-            <h2>🛡️ Fraud Alerts & Document Audits</h2>
-            <p>Real-time fraud audit results, stamp verification, and anomaly detection.</p>
+            <h2>🛡️ Fraud Alerts &amp; Document Audits</h2>
+            <p>Rule-Based Heuristic Analysis (Fallback) — Fraud detection model pending ML phase.</p>
           </div>
           <div class="workspace-content" id="fraud-alerts-container">
             <div class="loading-spinner">Loading fraud alerts...</div>
@@ -428,7 +428,7 @@
           <div class="drawer-section document-analysis-section hidden" id="document-analysis-section">
             <div class="section-title-wrapper">
               <h4 class="section-subtitle">Fraud Audit Dashboard</h4>
-              <span class="badge badge--success" id="analysis-status">Completed</span>
+              <span class="badge badge--warning" id="analysis-status">Rule-Based Heuristic (Fallback)</span>
             </div>
             
             <div class="premium-analysis-card">
@@ -437,7 +437,7 @@
                 <span class="analysis-val font-semibold" id="analysis-doc-type">Property Agreement</span>
               </div>
               <div class="analysis-row border-t border-b border-dark-border py-2 my-2" style="border-color: rgba(255,255,255,0.08); padding-top: 8px; padding-bottom: 8px; margin-top: 8px; margin-bottom: 8px;">
-                <span class="analysis-label">Fraud Probability:</span>
+                <span class="analysis-label">Heuristic Risk Score:</span>
                 <div class="risk-meter-wrapper">
                   <span class="analysis-val font-semibold" id="analysis-fraud-prob">92%</span>
                   <div class="risk-bar-bg">

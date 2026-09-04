@@ -230,6 +230,40 @@ const VLAPI = {
     return await this.request(`/evidence/${id}`, {
       method: 'DELETE'
     });
+  },
+
+  async downloadFile(endpoint, fallbackFilename = 'download') {
+    const token = VLUtils.storageGet(SESSION_KEY);
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    try {
+      const response = await fetch(`${API_BASE}${endpoint}`, { method: 'GET', headers });
+      if (!response.ok) {
+        const errData = await response.json().catch(() => null);
+        return { success: false, message: errData?.message || `Download failed (${response.status})` };
+      }
+      const blob = await response.blob();
+      const disposition = response.headers.get('Content-Disposition');
+      let filename = fallbackFilename;
+      if (disposition && disposition.includes('filename=')) {
+        const matches = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        if (matches && matches[1]) {
+          filename = matches[1].replace(/['"]/g, '');
+        }
+      }
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: 'Network error while downloading file.' };
+    }
   }
 };
 window.VLAPI = VLAPI;
@@ -379,21 +413,23 @@ const VLDashboard = {
 
   async loadNotifications() {
     const res = await VLAPI.fetchNotifications();
-    if (!res.success) return;
+    if (!res.success || !res.data) return;
     const badge = document.getElementById('notification-badge');
+    const unreadCount = res.data.unread_count || 0;
     if (badge) {
-      badge.textContent = res.data.unread_count;
-      badge.style.display = res.data.unread_count > 0 ? 'flex' : 'none';
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'flex' : 'none';
     }
     const list = document.getElementById('notification-list');
     if (list) {
-      if (res.data.notifications.length === 0) {
+      const notifs = res.data.notifications || (Array.isArray(res.data) ? res.data : []);
+      if (notifs.length === 0) {
         list.innerHTML = '<div class="text-secondary text-sm" style="text-align:center;padding:var(--space-md)">No active alerts.</div>';
       } else {
-        list.innerHTML = res.data.notifications.map(n => `
+        list.innerHTML = notifs.map(n => `
           <div class="notification-item" style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)">
-            <b style="font-size:12px;color:#c084fc;display:block;margin-bottom:2px;">${n.title}</b>
-            <p style="font-size:11.5px;margin:0;color:rgba(255,255,255,0.7)">${n.text}</p>
+            <b style="font-size:12px;color:#c084fc;display:block;margin-bottom:2px;">${n.title || 'Notification'}</b>
+            <p style="font-size:11.5px;margin:0;color:rgba(255,255,255,0.7)">${n.text || n.message || ''}</p>
           </div>
         `).join('');
       }
@@ -761,14 +797,14 @@ const VLChat = {
     stream.innerHTML = '<div class="text-secondary text-sm" style="text-align:center;padding:var(--space-md)">Synchronizing chat history…</div>';
 
     const res = await VLAPI.request(`/ai/chat/history?complaint_id=${this.activeThreadId}`);
-    if (!res.success) {
+    if (!res.success || !res.data) {
       stream.innerHTML = '';
       welcome.classList.remove('hidden');
       return;
     }
 
-    // If there are no custom user/AI messages (length is 0 or 1 with system greeting), display the elegant welcome view
-    if (res.data.messages.length <= 1) {
+    const messages = res.data.messages || (Array.isArray(res.data) ? res.data : []);
+    if (messages.length <= 1) {
       stream.innerHTML = '';
       stream.classList.add('hidden');
       welcome.classList.remove('hidden');
@@ -776,8 +812,7 @@ const VLChat = {
       welcome.classList.add('hidden');
       stream.classList.remove('hidden');
       stream.innerHTML = '';
-      res.data.messages.forEach(msg => {
-        // Skip default template system instructions if present
+      messages.forEach(msg => {
         if (msg.content && msg.content.includes("verify_system_instruction")) return;
         this.appendMessageBubble(msg.sender_id === VLAuth.getCurrentUser()?.user_id ? 'user' : 'ai', msg.content);
       });
@@ -1131,7 +1166,7 @@ const VLChat = {
 
     const data = res.data;
     document.getElementById('analysis-doc-type').textContent = data.analysis.document_type;
-    document.getElementById('analysis-status').textContent = data.analysis.status;
+    document.getElementById('analysis-status').textContent = data.analysis.status || 'Rule-Based Heuristic Analysis (Fallback)';
     
     const prob = data.analysis.fraud_probability;
     const probEl = document.getElementById('analysis-fraud-prob');
@@ -1261,14 +1296,25 @@ const VLChat = {
           <span>Generated: ${doc.generated_at ? new Date(doc.generated_at).toLocaleString('en-IN') : 'N/A'}</span>
         </div>
         <div class="card-actions-row">
-          <a href="/api/v1/documents/download/${doc.document_id}" target="_blank" class="btn btn--primary btn--sm" style="display:inline-flex;align-items:center;gap:4px;">
+          <button class="btn btn--primary btn--sm btn-download-doc" data-doc-id="${doc.document_id}" data-doc-type="${doc.document_type}" style="display:inline-flex;align-items:center;gap:4px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Download ${doc.document_type}
-          </a>
+          </button>
           <button class="btn btn--danger btn--sm btn-delete-doc" data-doc-id="${doc.document_id}">Delete</button>
         </div>
       </div>
     `).join('');
+
+    container.querySelectorAll('.btn-download-doc').forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.docId;
+        const type = (btn.dataset.docType || 'PDF').toLowerCase();
+        const res = await VLAPI.downloadFile(`/documents/download/${id}`, `complaint_doc_${id}.${type}`);
+        if (!res.success) {
+          VLUtils.showToast({ type: 'error', title: 'Download Error', message: res.message });
+        }
+      };
+    });
 
     container.querySelectorAll('.btn-delete-doc').forEach(btn => {
       btn.onclick = async () => {
@@ -1334,10 +1380,21 @@ const VLChat = {
         </div>
         <div class="card-actions-row">
           <button class="btn btn--primary btn--sm btn-inspect-audit" data-ev-id="${ev.evidence_id}">Inspect Audit Report</button>
-          <a href="/api/v1/evidence/download/${ev.evidence_id}" target="_blank" class="btn btn--outline btn--sm">Download Original</a>
+          <button class="btn btn--outline btn--sm btn-download-ev" data-ev-id="${ev.evidence_id}" data-ev-name="${VLUtils.escapeHtml(ev.original_name || ev.file_name)}">Download Original</button>
         </div>
       </div>
     `).join('');
+
+    container.querySelectorAll('.btn-download-ev').forEach(btn => {
+      btn.onclick = async () => {
+        const id = btn.dataset.evId;
+        const name = btn.dataset.evName || 'evidence_file';
+        const res = await VLAPI.downloadFile(`/evidence/download/${id}`, name);
+        if (!res.success) {
+          VLUtils.showToast({ type: 'error', title: 'Download Error', message: res.message });
+        }
+      };
+    });
 
     container.querySelectorAll('.btn-inspect-audit').forEach(btn => {
       btn.onclick = () => {
@@ -1539,8 +1596,8 @@ const VLChat = {
       };
     }
   }
-
-
+};
+window.VLChat = VLChat;
 
 /* =======================================================
 EVENT LISTENERS & INITIALIZATION

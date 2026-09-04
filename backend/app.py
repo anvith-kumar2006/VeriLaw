@@ -118,6 +118,8 @@ def create_app(config_override=None):
     from routes.notifications import notifications_bp
     from routes.reports import reports_bp
     from routes.admin import admin_bp
+    from routes.ocr import ocr_bp
+    from routes.timeline import timeline_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(users_bp)
@@ -131,6 +133,8 @@ def create_app(config_override=None):
     app.register_blueprint(notifications_bp)
     app.register_blueprint(reports_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(ocr_bp)
+    app.register_blueprint(timeline_bp)
 
     # ── Health Check ──────────────────────────────────────────────────
     @app.route("/api/v1/health", methods=["GET"])

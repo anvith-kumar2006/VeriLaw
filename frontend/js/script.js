@@ -2,7 +2,7 @@
 GLOBAL CONFIG
 ======================================================= */
 const API_BASE    = '/api/v1';
-const API_TIMEOUT = 10000; // 10 seconds
+const API_TIMEOUT = 120000; // 120 seconds
 
 /* =======================================================
 CONSTANTS
@@ -179,6 +179,12 @@ const VLAPI = {
       clearTimeout(timeout);
       const data = await response.json().catch(() => null);
       if (!response.ok) {
+        if (response.status === 401 && endpoint !== '/auth/login') {
+          VLAuth.clearSession();
+          if (!window.location.pathname.endsWith('/login.html')) {
+            window.location.href = 'login.html';
+          }
+        }
         return { success: false, message: data?.message || `Error ${response.status}`, data: data?.details || null };
       }
       return data;
@@ -380,20 +386,22 @@ const VLDashboard = {
   async loadNotifications() {
     const res = await VLAPI.fetchNotifications();
     if (!res.success) return;
+    const notifications = res.data?.data || [];
+    const unreadCount = notifications.filter(notification => !notification.is_read).length;
     const badge = document.getElementById('notification-badge');
     if (badge) {
-      badge.textContent = res.data.unread_count;
-      badge.style.display = res.data.unread_count > 0 ? 'flex' : 'none';
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'flex' : 'none';
     }
     const list = document.getElementById('notification-list');
     if (list) {
-      if (res.data.notifications.length === 0) {
+      if (notifications.length === 0) {
         list.innerHTML = '<div class="text-secondary text-sm" style="text-align:center;padding:var(--space-md)">No active alerts.</div>';
       } else {
-        list.innerHTML = res.data.notifications.map(n => `
+        list.innerHTML = notifications.map(n => `
           <div class="notification-item" style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.05)">
             <b style="font-size:12px;color:#c084fc;display:block;margin-bottom:2px;">${n.title}</b>
-            <p style="font-size:11.5px;margin:0;color:rgba(255,255,255,0.7)">${n.text}</p>
+            <p style="font-size:11.5px;margin:0;color:rgba(255,255,255,0.7)">${n.message}</p>
           </div>
         `).join('');
       }
@@ -1539,8 +1547,7 @@ const VLChat = {
       };
     }
   }
-
-
+};
 
 /* =======================================================
 EVENT LISTENERS & INITIALIZATION

@@ -15,6 +15,7 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy import text
 
 from extensions import db, jwt
+from config import Config
 from utils.helpers import ok, err
 
 # ──────────────────────────────────────────────────────────────────────
@@ -41,7 +42,7 @@ def create_app(config_override=None):
     )
 
     # ── Database Config ───────────────────────────────────────────────
-    database_url = os.environ.get("DATABASE_URL", "")
+    database_url = Config.DATABASE_URL
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
     if not database_url:
@@ -51,22 +52,9 @@ def create_app(config_override=None):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Adjust SQLAlchemy options per dialect
-    if database_url.startswith("sqlite"):
-        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-            "connect_args": {"timeout": 30, "check_same_thread": False},
-        }
-    else:
-        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-            "pool_recycle": 300,
-            "pool_pre_ping": True,
-            "pool_size": 5,
-            "max_overflow": 10,
-        }
-
     # ── JWT Config ───────────────────────────────────────────────────
     flask_env = os.environ.get("FLASK_ENV", "development").lower()
-    jwt_secret = os.environ.get("JWT_SECRET_KEY") or os.environ.get("SESSION_SECRET")
+    jwt_secret = Config.JWT_SECRET_KEY or os.environ.get("SESSION_SECRET")
 
     if not jwt_secret:
         if flask_env == "production":
@@ -82,15 +70,30 @@ def create_app(config_override=None):
     app.config["JWT_HEADER_TYPE"] = "Bearer"
 
     # ── Upload Folders ────────────────────────────────────────────────
-    upload_folder = os.path.join(os.getcwd(), "uploads")
-    generated_docs_folder = os.path.join(os.getcwd(), "generated_documents")
+    upload_folder = Config.UPLOAD_FOLDER
+    generated_docs_folder = Config.GENERATED_DOCS_FOLDER
     os.makedirs(upload_folder, exist_ok=True)
     os.makedirs(generated_docs_folder, exist_ok=True)
 
-    app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024  # 20 MB
+    app.config["MAX_CONTENT_LENGTH"] = Config.MAX_CONTENT_LENGTH
 
     if config_override:
         app.config.update(config_override)
+
+    # Adjust SQLAlchemy pool options per dialect — MUST happen AFTER config_override
+    # so test fixtures overriding DATABASE_URI to sqlite are respected.
+    final_db_url = app.config["SQLALCHEMY_DATABASE_URI"]
+    if final_db_url.startswith("sqlite"):
+        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+            "connect_args": {"timeout": 30, "check_same_thread": False},
+        }
+    else:
+        app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+            "pool_recycle": 300,
+            "pool_pre_ping": True,
+            "pool_size": 5,
+            "max_overflow": 10,
+        }
 
     # ── Initialize Extensions ─────────────────────────────────────────
     db.init_app(app)
@@ -288,6 +291,6 @@ app = create_app()
 if __name__ == "__main__":
     with app.app_context():
         init_db()
-    port = int(os.environ.get("PORT", 3000))
+    port = Config.PORT
     logger.info("Starting Judiciary Flow backend on port %d …", port)
     app.run(host="0.0.0.0", port=port, debug=False)

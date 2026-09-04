@@ -2,7 +2,7 @@
 -- VeriLaw (Judiciary Flow) — Complete MySQL Schema
 -- Compatible with MySQL 8.x and MySQL Workbench
 -- ============================================================
-
+drop database verilaw;
 CREATE DATABASE IF NOT EXISTS verilaw
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -268,7 +268,7 @@ GROUP BY user_id;
 -- ─── TRIGGERS ──────────────────────────────────────────────────
 DELIMITER $$
 
-CREATE TRIGGER IF NOT EXISTS trg_complaint_log
+CREATE TRIGGER trg_complaint_log
 AFTER INSERT ON complaints
 FOR EACH ROW
 BEGIN

@@ -1,41 +1,84 @@
 """
 services/ai_service.py – Gemini AI integration and chat helpers.
 
-API key is read exclusively from environment variables.
-Never log or expose the API key.
+Uses the google-genai SDK (google-genai >= 1.0) instead of the legacy
+google-generativeai package which has a broken httplib2/pyparsing dependency.
+
+API key is read from GEMINI_API_KEY or GOOGLE_API_KEY environment variables.
+Never log or expose the API key value.
 Falls back gracefully when the Gemini API is unavailable.
 """
 
 import os
-import importlib
 import logging
+import time
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from google.genai.types import GenerateContentResponse
 
 logger = logging.getLogger("verilaw")
 
 # ──────────────────────────────────────────────────────────────────────
-# GEMINI CLIENT FACTORY
+# GEMINI CLIENT FACTORY  (google-genai SDK)
 # ──────────────────────────────────────────────────────────────────────
 
-def _get_gemini_model():
+_GEMINI_MODEL = "gemini-3.5-flash-lite"
+try:
+    from config import Config
+    _GEMINI_MODEL = Config.GEMINI_MODEL
+except ImportError:
+    _GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+
+
+def _get_gemini_client():
     """
-    Return a configured Gemini GenerativeModel, or None if unavailable.
+    Return a configured google.genai.Client, or None if unavailable.
     The API key is read from GEMINI_API_KEY or GOOGLE_API_KEY env vars.
-    The key is never logged.
+    The key value is never logged.
     """
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if not api_key:
-        logger.warning("No Gemini API key found – AI will use fallback responses.")
+        logger.warning(
+            "No Gemini API key found (GEMINI_API_KEY / GOOGLE_API_KEY not set) "
+            "– AI will use fallback responses."
+        )
         return None
+
     try:
-        genai = importlib.import_module("google.generativeai")
-        genai.configure(api_key=api_key)
-        return genai.GenerativeModel("gemini-2.5-flash")
+        from google import genai  # google-genai SDK
+        client = genai.Client(api_key=api_key)
+        logger.info("Gemini client initialised successfully (model: %s).", _GEMINI_MODEL)
+        return client
     except Exception as exc:
-        # Log without exposing the key
-        logger.error("Failed to initialise Gemini model: %s", type(exc).__name__)
+        # Log type AND message — never the key value
+        logger.error(
+            "Failed to initialise Gemini client: %s – %s",
+            type(exc).__name__, str(exc)
+        )
         return None
 
 
+def _generate_content(client: Any, prompt: str) -> "GenerateContentResponse":
+    """Retry transient provider failures before allowing the caller to fall back."""
+    for attempt in range(3):
+        try:
+            return client.models.generate_content(model=_GEMINI_MODEL, contents=prompt)
+        except Exception as exc:
+            error_text = str(exc).upper()
+            retryable = any(
+                marker in error_text
+                for marker in ("429", "500", "502", "503", "504", "RESOURCE_EXHAUSTED", "UNAVAILABLE")
+            )
+            if not retryable or attempt == 2:
+                raise
+            delay = 2 ** attempt
+            logger.warning(
+                "Transient Gemini provider error (%s); retrying in %ds (attempt %d/3).",
+                type(exc).__name__, delay, attempt + 1,
+            )
+            time.sleep(delay)
+    raise RuntimeError("Gemini content generation exhausted without a response")
 # ──────────────────────────────────────────────────────────────────────
 # USER / WORKSPACE HELPERS
 # ──────────────────────────────────────────────────────────────────────
@@ -53,7 +96,7 @@ def get_or_create_ai_user():
             email="ai@verilaw.in",
             mobile="9999999999",
             password_hash=generate_password_hash(os.urandom(32).hex()),  # random, not used
-            role="ai",
+            role="citizen",  # internal bot; keep within the production role enum
         )
         db.session.add(ai_user)
         db.session.commit()
@@ -88,7 +131,7 @@ def get_or_create_chat_complaint(user_id: int):
 
 
 # ──────────────────────────────────────────────────────────────────────
-# AI RESPONSE GENERATION
+# FALLBACK RESPONSES
 # ──────────────────────────────────────────────────────────────────────
 
 _DOCUMENT_FALLBACK = (
@@ -120,14 +163,22 @@ _CHAT_FALLBACK = (
 )
 
 
+# ──────────────────────────────────────────────────────────────────────
+# AI RESPONSE GENERATION
+# ──────────────────────────────────────────────────────────────────────
+
 def generate_document_analysis(file_name: str, file_type: str, file_size_kb: float, ocr_text: str) -> str:
     """
     Generate a document fraud-analysis report using Gemini AI.
     Falls back to a canned response if the API is unavailable.
     """
-    model = _get_gemini_model()
-    if not model:
-        return f"### Document Verification Report\n\n**File:** `{file_name}`\n**Size:** `{file_size_kb} KB`\n\n{_DOCUMENT_FALLBACK}"
+    client = _get_gemini_client()
+    if not client:
+        return (
+            f"### Document Verification Report\n\n"
+            f"**File:** `{file_name}`\n**Size:** `{file_size_kb} KB`\n\n"
+            f"{_DOCUMENT_FALLBACK}"
+        )
 
     prompt = (
         "You are VeriLaw AI Document Auditor.\n"
@@ -146,11 +197,19 @@ def generate_document_analysis(file_name: str, file_type: str, file_size_kb: flo
         "5. Suggested Next Steps"
     )
     try:
-        response = model.generate_content(prompt)
-        return response.text
+        response = _generate_content(client, prompt)
+        return response.text or _DOCUMENT_FALLBACK
     except Exception as exc:
-        logger.error("Gemini document analysis failed: %s", type(exc).__name__)
-        return f"### Document Verification Report\n\n**File:** `{file_name}`\n\n*Gemini API error – using fallback analysis.*\n\n{_DOCUMENT_FALLBACK}"
+        logger.error(
+            "Gemini document analysis failed: %s – %s",
+            type(exc).__name__, str(exc)
+        )
+        return (
+            f"### Document Verification Report\n\n"
+            f"**File:** `{file_name}`\n\n"
+            f"*Gemini API error ({type(exc).__name__}) – using fallback analysis.*\n\n"
+            f"{_DOCUMENT_FALLBACK}"
+        )
 
 
 def generate_legal_chat_response(message_text: str) -> str:
@@ -158,19 +217,28 @@ def generate_legal_chat_response(message_text: str) -> str:
     Generate a legal assistant response using Gemini AI.
     Falls back to a canned response if the API is unavailable.
     """
-    model = _get_gemini_model()
-    if not model:
+    client = _get_gemini_client()
+    if not client:
         return _CHAT_FALLBACK
 
     prompt = (
-        "You are VeriLaw AI, a helpful and highly experienced legal assistant.\n"
+        "You are VeriLaw AI, a helpful and highly experienced Indian legal assistant.\n"
         "Help the user with their legal questions, document creation, or complaints.\n"
         "Provide section numbers, citations, or legal steps if applicable. Use markdown.\n\n"
         f"User query: {message_text}"
     )
     try:
-        response = model.generate_content(prompt)
-        return response.text
+        response = _generate_content(client, prompt)
+        return response.text or _CHAT_FALLBACK
     except Exception as exc:
-        logger.error("Gemini chat failed: %s", type(exc).__name__)
-        return f"*AI service temporarily unavailable.*\n\n{_CHAT_FALLBACK}"
+        logger.error(
+            "Gemini chat failed: %s – %s",
+            type(exc).__name__, str(exc)
+        )
+        # Re-raise so the route can return the real error to the logs
+        # but still give the user a meaningful message
+        return (
+            f"*AI error: {type(exc).__name__}*\n\n"
+            f"The Gemini API returned an error. Please check your GEMINI_API_KEY.\n\n"
+            f"{_CHAT_FALLBACK}"
+        )

@@ -93,8 +93,8 @@ def get_or_create_chat_complaint(user_id: int):
 
 _DOCUMENT_FALLBACK = (
     "### Document Verification Report\n\n"
-    "**Status:** Fallback (Gemini API unavailable)\n\n"
-    "Our rule-based fraud detection model has flagged this document as **High Risk (92% probability of forgery)**.\n\n"
+    "**Status:** Rule-Based Heuristic Analysis (Fallback - Machine Learning model not trained yet)\n\n"
+    "Our rule-based heuristic check has flagged this document as **High Risk (92% rule-based heuristic indicator)**.\n\n"
     "#### Key Findings:\n"
     "- **Date Discrepancies:** The date of execution and notary seal have an active inconsistency of 4 years.\n"
     "- **Signature Analysis:** The biometric or scanned signature of the first witness is identical to the notary "

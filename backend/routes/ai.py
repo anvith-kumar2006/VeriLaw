@@ -309,6 +309,7 @@ def get_ai_document_details(evidence_id):
             "document_type":    doc_type,
             "fraud_probability":fraud_prob,
             "confidence_score": confidence,
-            "status":           "Completed",
+            "status":           "Rule-Based Heuristic Analysis (Fallback)",
+            "analysis_mode":    "Rule-Based Heuristic",
         },
     })
